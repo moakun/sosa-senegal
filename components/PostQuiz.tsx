@@ -72,16 +72,16 @@ export default function PostQuiz() {
   
 
   const questions = [
-    { id: 'dispositif', label: 'Has your company implemented measures to protect itself from acts of corruption?' },
-    { id: 'engagement', label: 'Formalized commitment of Management against corruption in all its forms (anti-corruption policy, anti-corruption charter and/or code of conduct)?' },
-    { id: 'identification', label: 'Identification of corruption risks and development of risk mapping?' },
-    { id: 'formation', label: 'Training and awareness of staff on the risks of corruption and the prevention of conflicts of interest?' },
-    { id: 'procedure', label: 'Gift management procedure?' },
-    { id: 'dispositifAlert', label: "Alert system to collect reports of concern?" },
-    { id: 'certifierISO', label: 'Is your company ISO 37001 certified?' },
-    { id: 'mepSystem', label: "Is your company in the process of implementing an anti-corruption management system with a view to future certification according to the ISO 37001 standard?" },
-    { id: 'intention', label: 'Do you intend to certify your company under the ISO 37001 anti-corruption standard?' },
-  ];
+    { id: 'dispositif', label: 'Votre entreprise a-t-elle mis en place des mesures pour se protéger contre les actes de corruption ?' },
+    { id: 'engagement', label: 'La Direction a-t-elle formalisé un engagement contre la corruption sous toutes ses formes (politique anti-corruption, charte anti-corruption et/ou code de conduite) ?' },
+    { id: 'identification', label: 'Identification des risques de corruption et élaboration d\'une cartographie des risques ?' },
+    { id: 'formation', label: 'Formation et sensibilisation du personnel aux risques de corruption et à la prévention des conflits d\'intérêts ?' },
+    { id: 'procedure', label: 'Procédure de gestion des cadeaux ?' },
+    { id: 'dispositifAlert', label: 'Système d\'alerte pour recueillir les signalements préoccupants ?' },
+    { id: 'certifierISO', label: 'Votre entreprise est-elle certifiée ISO 37001 ?' },
+    { id: 'mepSystem', label: 'Votre entreprise est-elle en train de mettre en place un système de management anti-corruption en vue d\'une certification selon la norme ISO 37001 ?' },
+    { id: 'intention', label: 'Envisagez-vous de certifier votre entreprise selon la norme anti-corruption ISO 37001 ?' },
+];
 
   return (
     <div className="min-h-screen bg-blue-100 flex items-center justify-center p-4 font-sans">
@@ -91,7 +91,7 @@ export default function PostQuiz() {
             Questionnaire
           </CardTitle>
           <CardDescription className="text-center text-gray-500 text-sm">
-          Answer with Yes, No or a date.
+          Répondre par Oui, Non ou JJ/MM/AA
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6">

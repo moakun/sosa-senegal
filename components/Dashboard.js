@@ -189,15 +189,15 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white-300 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-white-500 mb-2">
-        Training Progress &quot;{session?.user?.fullName.toUpperCase()}&quot;
+        Progression de la formation pour "{session?.user?.fullName.toUpperCase()}"
         </h1>
-          <p className="text-black-500 mb-4">Follow your learning journey!</p>
+          <p className="text-black-500 mb-4">Suivez votre parcours d'apprentissage !</p>
 
 
         <ProgressBar progress={overallProgress} />
 
         <div className="bg-white-500 shadow-lg rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-black-600 mb-6">Completion status</h2>
+          <h2 className="text-2xl font-semibold text-black-600 mb-6">État d'avancement</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ProgressItem
               icon={BookOpen}
@@ -228,32 +228,32 @@ export default function Dashboard() {
 
         {/* Section d'accès au contenu */}
         <div className="bg-white-500 shadow-lg rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-black-600 mb-6">Access your Learning Materials</h2>
+          <h2 className="text-2xl font-semibold text-black-600 mb-6">Accédez à vos supports d'apprentissage</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex items-center p-6 bg-blue-200 rounded-lg">
               <Video className="h-10 w-10 text-blue-500 mr-4" />
               <div>
-                <p className="text-sm font-medium text-black-600 mb-1">Access the Videos</p>
+                <p className="text-sm font-medium text-black-600 mb-1">Accédez aux vidéos</p>
                 <Link href="/video" className="text-blue-500 font-bold text-xl">
-                Watch the videos
+                Regardez les vidéos
                 </Link>
               </div>
             </div>
             <div className="flex items-center p-6 bg-blue-200 rounded-lg">
               <BookOpen className="h-10 w-10 text-blue-500 mr-4" />
               <div>
-                <p className="text-sm font-medium text-black-600 mb-1">Complete the Questionnaire</p>
+                <p className="text-sm font-medium text-black-600 mb-1">Complétez le questionnaire</p>
                 <Link href="/questionnaire" className="text-blue-500 font-bold text-xl">
-                Complete the Questionnaire
+                Complétez le questionnaire
                 </Link>
               </div>
             </div>
             <div className="flex items-center p-6 bg-blue-200 rounded-lg">
               <BarChart2 className="h-10 w-10 text-blue-500 mr-4" />
               <div>
-                <p className="text-sm font-medium text-black-600 mb-1">Take the Quiz</p>
+                <p className="text-sm font-medium text-black-600 mb-1">Passez le quiz</p>
                 <Link href="" className="text-blue-500 font-bold text-xl">
-                Take the Quiz
+                Passez le quiz
                 </Link>
               </div>
             </div>
@@ -263,7 +263,7 @@ export default function Dashboard() {
         {isDownloadButtonVisible && (
           <Link href='/attestation'>
           <Button className="w-full mt-8 text-white-500 bg-blue-500 hover:bg-blue-700">
-           Download the Certificate
+          Téléchargez Votre Attestation
           </Button>
           </Link>
         )}

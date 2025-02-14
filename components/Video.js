@@ -8,12 +8,12 @@ export default function VideoPage() {
   const videos = [
     {
       id: 1,
-      title: "First Part",
-      url: "https://d21ulo4r1z07kx.cloudfront.net/uganda demo_1.mp4",
+      title: "première Partie",
+      url: "https://d21ulo4r1z07kx.cloudfront.net/FinalPartOne.mp4",
     },
     {
       id: 2,
-      title: "Second Part",
+      title: "Deuxième Partie",
       url: "",
     },
   ];
@@ -46,8 +46,8 @@ export default function VideoPage() {
 
           if (data.success) {
             setVideoStates({
-              video1: data.videoStatus.video1Status === "Seen",
-              video2: data.videoStatus.video2Status === "Seen",
+              video1: data.videoStatus.video1Status === "Vue",
+              video2: data.videoStatus.video2Status === "Vue",
             });
           } else {
             console.error("Error fetching video status:", data.error);
@@ -111,8 +111,8 @@ export default function VideoPage() {
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-6">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-black-600 mb-6">Course videos</h1>
-        <p className="text-black-500 mb-8">Choose a video to watch.</p>
+        <h1 className="text-4xl font-bold text-black-600 mb-6">Vidéo du cours</h1>
+        <p className="text-black-500 mb-8">Choisir un video:</p>
 
         <div className="space-y-6">
           {videos.map((video) => (
@@ -123,8 +123,8 @@ export default function VideoPage() {
               <div className="ml-4">
                 <h2 className="text-lg font-semibold">{video.title}</h2>
                 <p>
-                  {video.id === 1 && videoStates.video1 ? "Seen" : null}
-                  {video.id === 2 && videoStates.video2 ? "Seen" : null}
+                  {video.id === 1 && videoStates.video1 ? "Vue" : null}
+                  {video.id === 2 && videoStates.video2 ? "Vue" : null}
                 </p>
               </div>
               <button
@@ -140,7 +140,7 @@ export default function VideoPage() {
         {/* Section du lecteur vidéo */}
         {currentVideo && (
           <div className="mt-8 bg-white-500 shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-semibold text-black-600 mb-4">Now playing</h2>
+            <h2 className="text-2xl font-semibold text-black-600 mb-4">Lecture en cours</h2>
             <div className="flex justify-center">
               <video
                 controls
@@ -158,7 +158,7 @@ export default function VideoPage() {
               onClick={handleBackToDashboard}
               className="px-6 py-3 bg-blue-500 text-white-500 font-semibold rounded-lg shadow-lg hover:bg-green-600 transition-all"
             >
-              Return to dashboard
+              Retour au tableau de bord
             </button>
           </div>
         )}
