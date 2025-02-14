@@ -191,13 +191,13 @@ export default function Dashboard() {
         <h1 className="text-4xl font-bold text-white-500 mb-2">
         Progression de la formation pour "{session?.user?.fullName.toUpperCase()}"
         </h1>
-          <p className="text-black-500 mb-4">Suivez votre parcours d'apprentissage !</p>
+          <p className="text-black-500 mb-4">Suivez votre parcours d&quot;apprentissage !</p>
 
 
         <ProgressBar progress={overallProgress} />
 
         <div className="bg-white-500 shadow-lg rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-black-600 mb-6">État d'avancement</h2>
+          <h2 className="text-2xl font-semibold text-black-600 mb-6">État d&quot;avancement</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ProgressItem
               icon={BookOpen}
@@ -228,7 +228,7 @@ export default function Dashboard() {
 
         {/* Section d'accès au contenu */}
         <div className="bg-white-500 shadow-lg rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-black-600 mb-6">Accédez à vos supports d'apprentissage</h2>
+          <h2 className="text-2xl font-semibold text-black-600 mb-6">Accédez à vos supports d&quot;apprentissage</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex items-center p-6 bg-blue-200 rounded-lg">
               <Video className="h-10 w-10 text-blue-500 mr-4" />
