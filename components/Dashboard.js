@@ -57,8 +57,8 @@ export default function Dashboard() {
         const data = await response.json();
         if (data.success) {
           const videosCompleted =
-            (data.videoStatus.video1Status === 'Vue' ? 1 : 0) +
-            (data.videoStatus.video2Status === 'Vue' ? 1 : 0);
+            (data.videoStatus.video1Status === 'Regarde' ? 1 : 0) +
+            (data.videoStatus.video2Status === 'Regarde' ? 1 : 0);
 
           setProgress((prev) => ({
             ...prev,
