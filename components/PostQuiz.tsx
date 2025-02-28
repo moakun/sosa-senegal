@@ -107,7 +107,7 @@ export default function PostQuiz() {
                   value={formData[question.id as keyof typeof formData]}
                   onChange={handleChange}
                   required
-                  placeholder="Yes, No or DD/MM/YY"
+                  placeholder="Oui, Non ou JJ/MM/AA"
                   className="w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
                 />
               </div>
