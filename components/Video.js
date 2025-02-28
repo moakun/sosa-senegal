@@ -13,7 +13,7 @@ export default function VideoPage() {
     },
     {
       id: 2,
-      title: "Deuxième Partie",
+      title: "https://d21ulo4r1z07kx.cloudfront.net/SenegalTwo.mp4",
       url: "",
     },
   ];
