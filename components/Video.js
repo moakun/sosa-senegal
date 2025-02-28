@@ -8,13 +8,13 @@ export default function VideoPage() {
   const videos = [
     {
       id: 1,
-      title: "première Partie",
+      title: "Première Partie",
       url: "https://d21ulo4r1z07kx.cloudfront.net/FinalPartOne.mp4",
     },
     {
       id: 2,
-      title: "https://d21ulo4r1z07kx.cloudfront.net/SenegalTwo.mp4",
-      url: "",
+      title: "Deuxième Partie",
+      url: "https://d21ulo4r1z07kx.cloudfront.net/SenegalTwo.mp4",
     },
   ];
 
