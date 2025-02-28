@@ -13,26 +13,34 @@ const Results: React.FC<ResultsProps> = ({ score, totalQuestions, onRestart }) =
 
   return (
     <div className="text-center">
-      <h2 className="text-3xl font-bold mb-4">Quiz terminé!</h2>
+      <h2 className="text-3xl font-bold mb-4">Quiz terminé !</h2>
       <p className="text-2xl mb-4">
-        Votre score: {score} sur {totalQuestions}
+        Votre score est : {score} / {totalQuestions}
       </p>
       <Progress value={percentage} className="mb-4" />
       <div className="flex justify-center space-x-4 mt-6">
-        {/* Restart Quiz Button */}
+        {/* Redémarrer le quiz */}
         <button 
           onClick={onRestart} 
           className="px-4 py-2 bg-blue-500 text-white-500 rounded hover:bg-blue-800"
         >
-          Recommencer le quiz
+          Redémarrer le quiz
         </button>
 
-        {/* Link to Dashboard */}
+        {/* Lien vers le tableau de bord */}
         <Link 
           href="/dashboard" 
-          className="px-4 py-2 bg-gray-400 text-white-500 rounded "
+          className="px-4 py-2 bg-blue-500 text-white-500 rounded hover:bg-blue-800"
         >
           Retour au tableau de bord
+        </Link>
+
+        {/* Lien vers le questionnaire */}
+        <Link 
+          href="/questionnaire" 
+          className="px-4 py-2 bg-blue-500 text-white-500 rounded hover:bg-blue-800"
+        >
+          Aller au questionnaire
         </Link>
       </div>
     </div>

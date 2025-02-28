@@ -24,7 +24,7 @@ const questions = [
   },
   {
     question:
-      "Selon d'indice de perception de la corruption de TRANSPARENCYINTERNATIONAL le bénin est:",
+      "Selon d'indice de perception de la corruption de TRANSPARENCYINTERNATIONAL le Senegal est:",
     answerOptions: [
       { answer: "78 ème sur 180 pays à l'échelle mondial.", isCorrect: true },
       { answer: '1 er en Afrique.' },
@@ -61,12 +61,12 @@ const questions = [
     ],
   },
   {
-    question: 'SOGEA SATOM Bénin a interdit les cadeaux en espèce:',
+    question: 'SOGEA SATOM Senegal a interdit les cadeaux en espèce:',
     answerOptions: [{ answer: 'VRAI', isCorrect: true }, { answer: 'FAUX' }],
   },
   {
     question:
-      "SOGEA SATOM Bénin a mis à la disposition de son personnel et de ses partenaires commerciaux un dispositif d'alertes pour signaler toutes les inquiétudes en relation avec la corruption:",
+      "SOGEA SATOM Senegal a mis à la disposition de son personnel et de ses partenaires commerciaux un dispositif d'alertes pour signaler toutes les inquiétudes en relation avec la corruption:",
     answerOptions: [{ answer: 'VRAI', isCorrect: true }, { answer: 'FAUX' }],
   },
   {

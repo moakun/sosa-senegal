@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-
 export default function PostQuiz() {
   const router = useRouter();
 
@@ -24,7 +23,7 @@ export default function PostQuiz() {
     intention: '',
   });
 
-  const [loading, setLoading] = useState(false); // To handle loading state
+  const [loading, setLoading] = useState(false); // Pour gérer l'état de chargement
   const { data: session } = useSession();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +40,7 @@ export default function PostQuiz() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: session?.user?.email, // Replace this with the actual email
+          email: session?.user?.email, // Remplacez ceci par l'email réel
           ...formData,
         }),
       });
@@ -57,31 +56,30 @@ export default function PostQuiz() {
           certifierISO: '',
           mepSystem: '',
           intention: '',
-        }); // Reset form
+        }); // Réinitialiser le formulaire
         router.push('/dashboard');
       } else {
-        alert('Failed to update the data.');
+        alert('Échec de la mise à jour des données.');
       }
     } catch (error) {
-      console.error('Error updating data:', error);
-      alert('An error occurred. Please try again.');
+      console.error('Erreur lors de la mise à jour des données :', error);
+      alert('Une erreur est survenue. Veuillez réessayer.');
     } finally {
       setLoading(false);
     }
   };
-  
 
   const questions = [
-    { id: 'dispositif', label: 'Votre entreprise a-t-elle mis en place des mesures pour se protéger contre les actes de corruption ?' },
-    { id: 'engagement', label: 'La Direction a-t-elle formalisé un engagement contre la corruption sous toutes ses formes (politique anti-corruption, charte anti-corruption et/ou code de conduite) ?' },
-    { id: 'identification', label: 'Identification des risques de corruption et élaboration d\'une cartographie des risques ?' },
-    { id: 'formation', label: 'Formation et sensibilisation du personnel aux risques de corruption et à la prévention des conflits d\'intérêts ?' },
+    { id: 'dispositif', label: 'Votre entreprise a-t-elle mis en place des mesures pour se protéger des actes de corruption ?' },
+    { id: 'engagement', label: 'Engagement formalisé de la Direction contre la corruption sous toutes ses formes (politique anti-corruption, charte anti-corruption et/ou code de conduite) ?' },
+    { id: 'identification', label: 'Identification des risques de corruption et élaboration d’une cartographie des risques ?' },
+    { id: 'formation', label: 'Formation et sensibilisation du personnel aux risques de corruption et à la prévention des conflits d’intérêt ?' },
     { id: 'procedure', label: 'Procédure de gestion des cadeaux ?' },
-    { id: 'dispositifAlert', label: 'Système d\'alerte pour recueillir les signalements préoccupants ?' },
+    { id: 'dispositifAlert', label: 'Système d’alerte pour collecter les signalements de préoccupations ?' },
     { id: 'certifierISO', label: 'Votre entreprise est-elle certifiée ISO 37001 ?' },
-    { id: 'mepSystem', label: 'Votre entreprise est-elle en train de mettre en place un système de management anti-corruption en vue d\'une certification selon la norme ISO 37001 ?' },
-    { id: 'intention', label: 'Envisagez-vous de certifier votre entreprise selon la norme anti-corruption ISO 37001 ?' },
-];
+    { id: 'mepSystem', label: 'Votre entreprise est-elle en train de mettre en place un système de gestion anti-corruption en vue d’une certification future selon la norme ISO 37001 ?' },
+    { id: 'intention', label: 'Avez-vous l’intention de certifier votre entreprise selon la norme anti-corruption ISO 37001 ?' },
+  ];
 
   return (
     <div className="min-h-screen bg-blue-100 flex items-center justify-center p-4 font-sans">
@@ -91,7 +89,7 @@ export default function PostQuiz() {
             Questionnaire
           </CardTitle>
           <CardDescription className="text-center text-gray-500 text-sm">
-          Répondre par Oui, Non ou JJ/MM/AA
+            Répondez par Oui, Non ou une date.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6">
@@ -115,11 +113,9 @@ export default function PostQuiz() {
             <Button
               type="submit"
               disabled={loading}
-              className={`w-full mt-6 text-white-500 rounded-md py-2 text-sm font-medium ${
-                loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'
-              }`}
+              className={`w-full mt-6 text-white-500 rounded-md py-2 text-sm font-medium ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}
             >
-              {loading ? 'Loading...' : 'Send'}
+              {loading ? 'Chargement...' : 'Envoyer'}
             </Button>
           </form>
         </CardContent>

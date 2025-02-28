@@ -37,7 +37,7 @@ const Quiz: React.FC = () => {
         if (data.userData?.score !== null) {
           const score = data.userData.score;
   
-          if (score >= 8) {
+          if (score >= 7) {
             // If score is 8 or above, show it
             setScore(score);
             setShowScore(true);
@@ -46,8 +46,8 @@ const Quiz: React.FC = () => {
             setScore(score);
             setShowScore(false);
             toast({
-              title: "Score Inférieur",
-              description: `Votre score est ${score}, vous devrez essayer à nouveau pour passer l'examen.`,
+              title: "Score inférieur",
+              description: `Votre score est ${score}, vous devez repasser l'examen.` ,
               variant: "default",
             });
           }
@@ -56,33 +56,29 @@ const Quiz: React.FC = () => {
           setScore(0);
           setShowScore(false);
           toast({
-            title: "Premier Examen",
-            description: "Vous n'avez pas encore passé l'examen. Bonne chance !",
+            title: "Première tentative d'examen",
+            description: "Bonne chance pour votre examen !" ,
             variant: "default",
           });
         }
       } else {
         // Handle case when success is false
-        console.log(data.message || "Unknown error occurred");
+        console.log(data.message || "Erreur inconnue");
         toast({
           title: "Message",
-          description: data.message || "Impossible de récupérer votre score précédent.",
+          description: data.message || "Impossible de récupérer le score de l'utilisateur",
           variant: "default",
         });
       }
     } catch (error) {
-      console.error('Error fetching user score:', error);
+      console.error('Erreur lors de la récupération du score de l\'utilisateur:', error);
       toast({
         title: "Message",
-        description: "Impossible de récupérer votre score précédent.",
+        description: "Impossible de récupérer le score de l'utilisateur",
         variant: "default",
       });
     }
   };
-  
-  
-  
-  
 
   const handleAnswerOptionClick = (answerIndex: number) => {
     const newUserAnswers = [...userAnswers]
@@ -133,13 +129,13 @@ const Quiz: React.FC = () => {
       console.log('Score saved:', data)
       toast({
         title: "Score enregistré",
-        description: "Votre score a été sauvegardé avec succès.",
+        description: "Votre score a été enregistré avec succès.",
       })
     } catch (error) {
-      console.error('Error saving score:', error)
+      console.error('Erreur lors de l\'enregistrement du score:', error)
       toast({
         title: "Erreur",
-        description: "Impossible d'enregistrer votre score. Veuillez réessayer.",
+        description: "Impossible d'enregistrer votre score",
         variant: "destructive",
       })
     }
@@ -156,7 +152,7 @@ const Quiz: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
     <Card className="w-full max-w-7xl bg-white-500 shadow-lg">
       <CardHeader>
-        <CardTitle>Quiz sur l&apos;éthique et l&apos;anticorruption</CardTitle>
+        <CardTitle>Quiz sur l'éthique et la lutte contre la corruption</CardTitle>
       </CardHeader>
       <CardContent>
         {showScore ? (
@@ -203,7 +199,7 @@ const Quiz: React.FC = () => {
             onClick={handleNext}
             className="bg-blue-500 text-white-500 hover:bg-blue-600"
           >
-            {currentQuestion === questions.length - 1 ? 'Terminer' : 'Suivant'}
+            {currentQuestion === questions.length - 1 ? 'Terminé' : 'Suivant'}
           </Button>
         </CardFooter>
       )}

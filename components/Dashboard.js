@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { BarChart2, BookOpen, CheckCircle, Download, Video } from 'lucide-react';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react'; // Import useSession hook for authentication
-import { Button } from '@/components/ui/button'; // Assuming you're using a custom Button component
+import { useSession } from 'next-auth/react'; // Importation du hook useSession pour l'authentification
+import { Button } from '@/components/ui/button'; // Supposons que vous utilisez un composant Button personnalisé
 
 export default function Dashboard() {
   const [progress, setProgress] = useState({
@@ -14,102 +14,107 @@ export default function Dashboard() {
     attestationDownloaded: false,
   });
 
-  const { data: session, status } = useSession(); // Access session for authentication
-  const [gotAttestation, setGotAttestation] = useState(false); // State for attestation status
+  const { data: session, status } = useSession(); // Accès à la session pour l'authentification
+  const [gotAttestation, setGotAttestation] = useState(false); // État pour le statut de l'attestation
 
   useEffect(() => {
     if (status === 'loading') return;
 
     if (!session || !session.user?.email) {
-      console.error('User is not logged in');
+      console.error('L\'utilisateur n\'est pas connecté');
       return;
     }
 
-    // Fetch attestation status
     const fetchAttestationStatus = async () => {
       try {
         const response = await fetch(`/api/certinfo?email=${session.user.email}`, {
           method: 'GET',
         });
-  
+    
         if (!response.ok) {
-          throw new Error('echec du fetch du status de l attestation:');
+          throw new Error('échec du fetch du statut de l\'attestation :');
         }
-  
+    
         const data = await response.json();
+        console.log('Données de l\'attestation:', data); // Ligne de débogage
+    
         if (data.gotAttestation !== undefined) {
           setGotAttestation(data.gotAttestation);
         }
       } catch (error) {
-        console.error('echec du fetch du status de l attestation:', error);
+        console.error('échec du fetch du statut de l\'attestation:', error);
       }
     };
   
 
-    // Fetch video data
     const fetchVideoData = async () => {
       try {
         const response = await fetch(`/api/video?email=${session.user.email}`);
         if (!response.ok) {
-          throw new Error('echec du fetch de la data des video');
+          throw new Error(`Échec du fetch des données vidéo. Statut: ${response.status}`);
         }
-
+    
         const data = await response.json();
+        console.log('Données des vidéos:', data); // Ligne de débogage
+    
         if (data.success) {
           const videosCompleted =
-            (data.videoStatus.video1Status === 'Regarde' ? 1 : 0) +
-            (data.videoStatus.video2Status === 'Regarde' ? 1 : 0);
-
+            (data.videoStatus.video1Status === "Regarde" ? 1 : 0) +
+            (data.videoStatus.video2Status === "Regarde" ? 1 : 0); 
+    
           setProgress((prev) => ({
             ...prev,
             videosCompleted,
           }));
         } else {
-          console.error('echec du fetch de la data des videos:', data.error);
+          console.error('Erreur lors de la récupération des données vidéo:', data.error);
         }
       } catch (error) {
-        console.error('Echec du fetch du status des videos:', error);
+        console.error('Erreur lors de la récupération du statut vidéo:', error.message);
       }
     };
+    
 
-    // Fetch questionnaire data
     const fetchQuestionnaireData = async () => {
       try {
         const response = await fetch(`/api/questionnaire?email=${session.user.email}`);
         if (!response.ok) {
-          throw new Error('echec du fetch  de la data du questionnaire');
+          throw new Error('échec du fetch des données du questionnaire');
         }
-
+    
         const data = await response.json();
+        console.log('Données du questionnaire:', data); // Ligne de débogage
+    
         if (data.success) {
           const questionnaireCompleted = Object.values(data.userData).every(
             (value) => value !== null
           );
-
+    
           setProgress((prev) => ({
             ...prev,
             questionnaireCompleted: questionnaireCompleted ? 1 : 0,
           }));
         } else {
-          console.error('echec du fetch  de la data du questionnaire:', data.error);
+          console.error('échec du fetch des données du questionnaire:', data.error);
         }
       } catch (error) {
-        console.error('echec du fetch du status du questionnaire:', error);
+        console.error('échec du fetch du statut du questionnaire:', error);
       }
     };
 
-    // Fetch quiz score data
     const fetchQuizData = async () => {
       try {
         const response = await fetch(`/api/score?email=${session.user.email}`);
         if (!response.ok) {
-          throw new Error('Echec du fetch pour la data du quiz');
+          throw new Error('Échec du fetch des données du quiz');
         }
-
+    
         const data = await response.json();
+        console.log('Données du quiz:', data); // Ligne de débogage
+    
         if (data.success) {
           if (data.userData.score !== null) {
-            const quizPassed = data.userData.score > 8; // Assuming passing score is greater than 8
+            const quizPassed = data.userData.score > 8; // Supposons que la note de passage soit supérieure à 8
             setProgress((prev) => ({
               ...prev,
               quizPassed,
@@ -121,10 +126,10 @@ export default function Dashboard() {
             }));
           }
         } else {
-          console.log('Erreur en cherchant la data du quiz:', data.error);
+          console.log('Erreur en cherchant les données du quiz:', data.error);
         }
       } catch (error) {
-        console.log('Erreur en cherchant la data du quiz:', error);
+        console.log('Erreur en cherchant les données du quiz:', error);
       }
     };
 
@@ -135,10 +140,10 @@ export default function Dashboard() {
   }, [session, status]);
 
   const calculateOverallProgress = () => {
-    // Total steps should account for videos, quiz, questionnaire, and attestation
+    // Le nombre total d'étapes doit prendre en compte les vidéos, le quiz, le questionnaire et l'attestation
     const totalSteps = 4;
     const completedSteps = [
-      progress.videosCompleted === 2, // Videos
+      progress.videosCompleted === 2, // Vidéos
       progress.quizPassed,           // Quiz
       progress.questionnaireCompleted === 1, // Questionnaire
       gotAttestation,               // Attestation
@@ -189,46 +194,46 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white-300 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-white-500 mb-2">
-        Progression de la formation pour "{session?.user?.fullName.toUpperCase()}"
+          Progrès de la formation &quot;{session?.user?.fullName.toUpperCase()}&quot;
         </h1>
-          <p className="text-black-500 mb-4">Suivez votre parcours d&apos;apprentissage !</p>
+        <p className="text-black-500 mb-4">Suivez votre parcours d'apprentissage !</p>
 
 
         <ProgressBar progress={overallProgress} />
 
         <div className="bg-white-500 shadow-lg rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-black-600 mb-6">État d&apos;avancement</h2>
+          <h2 className="text-2xl font-semibold text-black-600 mb-6">Statut de la complétion</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ProgressItem
               icon={BookOpen}
-              title="Vidéos regardées"
+              title="Vidéos Regardées"
               value={`${progress.videosCompleted}/2`}
               completed={progress.videosCompleted === 2}
             />
             <ProgressItem
               icon={BarChart2}
-              title="Quiz Performance"
-              value={progress.quizPassed ? 'Réussi' : 'Non encore passé'}
+              title="Performance du Quiz"
+              value={progress.quizPassed ? 'Réussi' : 'Pas encore réussi'}
               completed={progress.quizPassed}
             />
             <ProgressItem
               icon={CheckCircle}
               title="Questionnaire"
-              value={progress.questionnaireCompleted ? 'Fini' : 'Pas encore fini'}
+              value={progress.questionnaireCompleted ? 'Terminé' : 'Pas encore fait'}
               completed={progress.questionnaireCompleted}
             />
             <ProgressItem
               icon={Download}
-              title="Attestation de la formation"
+              title="Attestation de formation"
               value={gotAttestation ? 'Téléchargée' : 'Pas encore téléchargée'}
               completed={gotAttestation}
             />
           </div>
         </div>
 
-        {/* Section d'accès au contenu */}
-        <div className="bg-white-500 shadow-lg rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-black-600 mb-6">Accédez à vos supports d&apos;apprentissage</h2>
+     {/* Section d'accès au contenu */}
+     <div className="bg-white-500 shadow-lg rounded-2xl p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-black-600 mb-6">Accédez à vos supports de formation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex items-center p-6 bg-blue-200 rounded-lg">
               <Video className="h-10 w-10 text-blue-500 mr-4" />
@@ -252,18 +257,19 @@ export default function Dashboard() {
               <BarChart2 className="h-10 w-10 text-blue-500 mr-4" />
               <div>
                 <p className="text-sm font-medium text-black-600 mb-1">Passez le quiz</p>
-                <Link href="" className="text-blue-500 font-bold text-xl">
+                <Link href="/quiz" className="text-blue-500 font-bold text-xl">
                 Passez le quiz
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
-
-        {isDownloadButtonVisible && (
+            </div>
+            </div>
+            
+          {/* Bouton d'attestation */}
+            {isDownloadButtonVisible && (
           <Link href='/attestation'>
           <Button className="w-full mt-8 text-white-500 bg-blue-500 hover:bg-blue-700">
-          Téléchargez Votre Attestation
+          Télécharger l'attestation
           </Button>
           </Link>
         )}
