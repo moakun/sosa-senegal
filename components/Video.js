@@ -46,8 +46,8 @@ export default function VideoPage() {
 
           if (data.success) {
             setVideoStates({
-              video1: data.videoStatus.video1Status === "Vue",
-              video2: data.videoStatus.video2Status === "Vue",
+              video1: data.videoStatus.video1Status === "Regarde",
+              video2: data.videoStatus.video2Status === "Regarde",
             });
           } else {
             console.error("Error fetching video status:", data.error);
@@ -123,8 +123,8 @@ export default function VideoPage() {
               <div className="ml-4">
                 <h2 className="text-lg font-semibold">{video.title}</h2>
                 <p>
-                  {video.id === 1 && videoStates.video1 ? "Vue" : null}
-                  {video.id === 2 && videoStates.video2 ? "Vue" : null}
+                  {video.id === 1 && videoStates.video1 ? "Regarde" : null}
+                  {video.id === 2 && videoStates.video2 ? "Regarde" : null}
                 </p>
               </div>
               <button
