@@ -10,7 +10,8 @@ const features = [
   "Engagement du groupe VINCI.",
   "Lignes directrices éthiques du groupe VINCI.",
   "Procédure d'évaluation des tiers.",
-  "Régime disciplinaire et sanctions."
+  "Régime disciplinaire et sanctions.",
+  "Politique et procédures anticorruption de LSE et SOGEA SATOM SENEGAL."
 ]
 
 const Feature = () => {
@@ -38,7 +39,7 @@ const Feature = () => {
 
         <motion.div className="flex flex-col items-end justify-center ml-auto w-full lg:w-9/12" variants={scrollAnimation}>
           <h3 className="text-3xl lg:text-4xl font-medium leading-relaxed text-black-600">
-          Point important dans notre formation :
+          Points importants de la formation :
           </h3>
           <p className="my-2 text-black-500">
           Concernant notre formation, vous explorerez plusieurs aspects de la lutte contre la corruption !
