@@ -10,23 +10,23 @@ import Link from "next/link";
 
 
 const Hero = ({
-  listUser = [
+  /* listUser = [
     {
-      name: "",
-      number: "",
-      icon: "",
+      name: "Utilisateurs formés",
+      number: "500",
+      icon: "/assets/Icon/one.svg",
     },
     {
-      name: "",
-      number: "",
-      icon: "",
+      name: "Certifications délivrées",
+      number: "276",
+      icon: "/assets/Icon/two.svg",
     },
     {
-      name: "",
-      number: "",
-      icon: "",
+      name: "Utilisateurs souhaitant se certifier ISO",
+      number: "77%",
+      icon: "/assets/Icon/three.svg",
     },
-  ],
+  ], */
 }) => {
   const scrollAnimation = useMemo(() => getScrollAnimation(), []);
 
@@ -65,7 +65,7 @@ const Hero = ({
           </motion.div>
       </ScrollAnimationWrapper>
       <div className="relative w-full flex">
-        {/* <ScrollAnimationWrapper
+      {/*   <ScrollAnimationWrapper
           className="rounded-lg w-full grid grid-flow-row sm:grid-flow-row grid-cols-1 sm:grid-cols-3 py-9 divide-y-2 sm:divide-y-0 sm:divide-x-2 divide-gray-100 bg-white-500 z-10">
           {listUser.map((listUsers, index) => (
             <motion.div
