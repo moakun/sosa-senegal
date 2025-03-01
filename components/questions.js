@@ -26,7 +26,7 @@ const questions = [
     question:
       "Selon d'indice de perception de la corruption de TRANSPARENCYINTERNATIONAL le Senegal est:",
     answerOptions: [
-      { answer: "78 ème sur 180 pays à l'échelle mondial.", isCorrect: true },
+      { answer: "73 ème sur 180 pays à l'échelle mondial.", isCorrect: true },
       { answer: '1 er en Afrique.' },
       {
         answer:
@@ -37,7 +37,7 @@ const questions = [
   },
   {
     question:
-      'La Loi 2011-20 du 12 Octobre 2011 prévoit des sanctions pouvant aller à la réclusion à perpétuité :',
+      'le code pénal sénégalais distingue entre la corruption passive et la corruption active:',
     answerOptions: [{ answer: 'VRAI', isCorrect: true }, { answer: 'FAUX' }],
   },
   {

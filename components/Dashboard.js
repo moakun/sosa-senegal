@@ -114,7 +114,7 @@ export default function Dashboard() {
     
         if (data.success) {
           if (data.userData.score !== null) {
-            const quizPassed = data.userData.score > 8; // Supposons que la note de passage soit supérieure à 8
+            const quizPassed = data.userData.score >= 7; // Supposons que la note de passage soit supérieure à 8
             setProgress((prev) => ({
               ...prev,
               quizPassed,
