@@ -15,15 +15,28 @@ export function Certificate({ userName, company, date, courseName }: Certificate
       <div className="absolute inset-6 border-2 border-gray-300"></div>
 
       <div className="relative h-full flex flex-col items-center justify-between py-12">
-        {/* Logo */}
-        <div className="space-y-4">
-        <img src="/assets/sosal.png" alt="Logo de SOGEA SATOM" width={160} height={160} className="mx-auto" />
+        {/* Logo Container */}
+        <div className="flex justify-center items-center gap-12 w-full mb-8 px-12">
+          <div className="flex-1 flex justify-end">
+            <img 
+              src="/assets/sosal.png" 
+              alt="Logo de SOGEA SATOM" 
+              className="h-24 w-auto object-contain"
+            />
+          </div>
+          <div className="flex-1 flex justify-start">
+            <img 
+              src="/assets/lse.jpeg" 
+              alt="Logo LSE" 
+              className="h-24 w-auto object-contain"
+            />
+          </div>
         </div>
 
         {/* Certificate Content */}
         <div className="space-y-8 text-center">
           <p className="text-xl text-gray-800">
-          Les sociétés LSE et SOGEA SATOM SÉNÉGAL Certifient que
+            Les sociétés LSE et SOGEA SATOM SÉNÉGAL Certifient que
           </p>
           <p className="text-2xl font-semibold text-gray-900">
             {userName.toUpperCase()} de la société {company.toUpperCase()}
