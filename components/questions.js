@@ -26,7 +26,7 @@ const questions = [
     question:
       "Selon d'indice de perception de la corruption de TRANSPARENCYINTERNATIONAL le Senegal est:",
     answerOptions: [
-      { answer: "73 ème sur 180 pays à l'échelle mondial.", isCorrect: true },
+      { answer: "69 ème sur 180 pays à l'échelle mondial.", isCorrect: true },
       { answer: '1 er en Afrique.' },
       {
         answer:
