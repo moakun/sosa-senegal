@@ -180,17 +180,18 @@ const Quiz: React.FC = () => {
               <div className="space-y-2">
                 {questions[currentQuestion].answerOptions.map((answerOption, index) => (
                   <Button
-                    key={index}
-                    onClick={() => handleAnswerOptionClick(index)}
-                    variant={userAnswers[currentQuestion] === index ? "default" : "outline"}
-                    className={`w-full justify-start h-auto py-3 px-4 text-left ${
+                  key={index}
+                  onClick={() => handleAnswerOptionClick(index)}
+                  variant={userAnswers[currentQuestion] === index ? "default" : "outline"}
+                  className={`w-full justify-start h-auto py-3 px-4 text-left 
+                    whitespace-normal min-h-[80px] break-words ${
                       userAnswers[currentQuestion] === index
                         ? 'bg-blue-500 text-white hover:bg-blue-600'
                         : 'bg-white text-black hover:bg-blue-100'
                     }`}
-                  >
-                    {answerOption.answer}
-                  </Button>
+                >
+                  {answerOption.answer}
+                </Button>
                 ))}
               </div>
             </>
