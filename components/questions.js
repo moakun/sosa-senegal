@@ -66,7 +66,7 @@ const questions = [
   },
   {
     question:
-      "SOGEA SATOM Sénégal et LSE ont mis à la disposition de leurs personnel et de leurs partenaires commerciaux un dispositif d'alertes pour signaler toutes les inquiétudes en relation avec la corruption:",
+      "SOGEA SATOM Sénégal et LSE ont mis à la disposition de leur personnel et de leurs partenaires commerciaux un dispositif d'alertes pour signaler toutes les inquiétudes en relation avec la corruption:",
     answerOptions: [{ answer: 'VRAI', isCorrect: true }, { answer: 'FAUX' }],
   },
   {
