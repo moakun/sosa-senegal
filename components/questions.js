@@ -61,12 +61,12 @@ const questions = [
     ],
   },
   {
-    question: 'SOGEA SATOM Sénegél et LSE ont interdit les cadeaux en espèce:',
+    question: 'SOGEA SATOM Sénégal et LSE ont interdit les cadeaux en espèce:',
     answerOptions: [{ answer: 'VRAI', isCorrect: true }, { answer: 'FAUX' }],
   },
   {
     question:
-      "SOGEA SATOM Sénégal et LSE a mis à la disposition de son personnel et de ses partenaires commerciaux un dispositif d'alertes pour signaler toutes les inquiétudes en relation avec la corruption:",
+      "SOGEA SATOM Sénégal et LSE ont mis à la disposition de son personnel et de ses partenaires commerciaux un dispositif d'alertes pour signaler toutes les inquiétudes en relation avec la corruption:",
     answerOptions: [{ answer: 'VRAI', isCorrect: true }, { answer: 'FAUX' }],
   },
   {
