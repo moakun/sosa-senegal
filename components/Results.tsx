@@ -8,12 +8,12 @@ interface ResultsProps {
   onRestart: () => void
 }
 
-const Results: React.FC<ResultsProps> = ({ score, totalQuestions, onRestart }) => {
+const CongoResults: React.FC<ResultsProps> = ({ score, totalQuestions, onRestart }) => {
   const percentage = (score / totalQuestions) * 100
 
   return (
     <div className="text-center">
-      <h2 className="text-3xl font-bold mb-4">Quiz terminé !</h2>
+      <h2 className="text-3xl font-bold mb-4">Quiz terminé - Congo</h2>
       <p className="text-2xl mb-4">
         Votre score est : {score} / {totalQuestions}
       </p>
@@ -22,23 +22,23 @@ const Results: React.FC<ResultsProps> = ({ score, totalQuestions, onRestart }) =
         {/* Redémarrer le quiz */}
         <button 
           onClick={onRestart} 
-          className="px-4 py-2 bg-blue-500 text-white-500 rounded hover:bg-blue-800"
+          className="px-4 py-2 bg-blue-500 text-white-500 rounded hover:bg-blue-600 transition-colors"
         >
           Redémarrer le quiz
         </button>
 
-        {/* Lien vers le tableau de bord */}
+        {/* Lien vers le tableau de bord Congo */}
         <Link 
           href="/dashboard" 
-          className="px-4 py-2 bg-blue-500 text-white-500 rounded hover:bg-blue-800"
+          className="px-4 py-2 bg-blue-500 text-white-500 rounded hover:bg-blue-600 transition-colors"
         >
           Retour au tableau de bord
         </Link>
 
-        {/* Lien vers le questionnaire */}
+        {/* Lien vers le questionnaire Congo */}
         <Link 
           href="/questionnaire" 
-          className="px-4 py-2 bg-blue-500 text-white-500 rounded hover:bg-blue-800"
+          className="px-4 py-2 bg-blue-500 text-white-500 rounded hover:bg-blue-600 transition-colors"
         >
           Aller au questionnaire
         </Link>
@@ -47,4 +47,4 @@ const Results: React.FC<ResultsProps> = ({ score, totalQuestions, onRestart }) =
   )
 }
 
-export default Results
+export default CongoResults

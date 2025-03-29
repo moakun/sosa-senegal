@@ -1,20 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react"; // Importer le hook useSession pour la gestion de la session
-import { useRouter } from "next/navigation"; // Pour rediriger si nécessaire
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-export default function VideoPage() {
+export default function Video() {
   const videos = [
     {
       id: 1,
       title: "Première Partie",
-      url: "https://d21ulo4r1z07kx.cloudfront.net/FinalSenegalOne.mp4",
+      url: "https://d21ulo4r1z07kx.cloudfront.net/FinalCongoOne.mp4", // Updated to Congo videos
     },
     {
       id: 2,
       title: "Deuxième Partie",
-      url: "https://d21ulo4r1z07kx.cloudfront.net/FinalSenegalTwo.mp4",
+      url: "https://d21ulo4r1z07kx.cloudfront.net/FinalCongoTwo.mp4", // Updated to Congo videos
     },
   ];
 
@@ -24,20 +24,14 @@ export default function VideoPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "loading") return; // Ne pas récupérer tant que la session n'est pas chargée
+    if (status === "loading") return;
     if (!session || !session.user?.email) {
-      router.push("/login"); // Rediriger vers la page de connexion si non connecté
+      router.push("/login"); // Updated to Congo login
     } else {
       const fetchVideoStatus = async () => {
         try {
-          const email = session.user.email; // Utiliser l'email de la session
-
-          if (!email) {
-            throw new Error("L'email de l'utilisateur est manquant");
-          }
-
-          const response = await fetch(`/api/video?email=${email}`); // Récupérer le statut de la vidéo via l'API
-
+          const response = await fetch(`/api/video?email=${session.user.email}&schema=congo`); // Added Congo schema
+          
           if (!response.ok) {
             throw new Error("Échec de la récupération du statut de la vidéo");
           }
@@ -49,11 +43,9 @@ export default function VideoPage() {
               video1: data.videoStatus.video1Status === "Vu",
               video2: data.videoStatus.video2Status === "Vu",
             });
-          } else {
-            console.error("Erreur lors de la récupération du statut de la vidéo :", data.error);
           }
         } catch (error) {
-          console.error("Erreur lors de la récupération du statut de la vidéo :", error);
+          console.error("Erreur:", error);
         }
       };
 
@@ -62,50 +54,37 @@ export default function VideoPage() {
   }, [session, status, router]);
 
   const handleWatchNow = async (videoId) => {
-    if (!session?.user?.email) return; // S'assurer que l'utilisateur est connecté avant de mettre à jour
+    if (!session?.user?.email) return;
 
     try {
-      // Mettre à jour l'état de la vidéo pour la vidéo sélectionnée
       const videoKey = videoId === 1 ? "video1" : "video2";
       setVideoStates((prev) => ({ ...prev, [videoKey]: true }));
-
-      // Définir la vidéo actuelle à afficher
       setCurrentVideo(videoId);
 
-      // Envoyer la mise à jour du statut de la vidéo à l'API backend
       const response = await fetch("/api/video", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: session.user.email, // Envoyer l'email au lieu de l'id
-          [videoKey]: true, // Marquer la vidéo comme vue
+          email: session.user.email,
+          [videoKey]: true,
+          schema: 'congo' // Added Congo schema
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Échec de la mise à jour du statut de la vidéo");
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
-        console.log("Statut de la vidéo mis à jour avec succès");
-      } else {
-        console.error("Erreur lors de la mise à jour du statut de la vidéo :", data.error);
+        throw new Error("Échec de la mise à jour");
       }
     } catch (error) {
-      console.error("Erreur lors de la gestion de la vidéo :", error);
+      console.error("Erreur:", error);
     }
   };
 
-  // Vérifier si les deux vidéos sont marquées comme vues
   const allVideosWatched = videoStates.video1 && videoStates.video2;
 
-  // Gérer la redirection vers le tableau de bord lorsque le bouton est cliqué
   const handleBackToDashboard = () => {
-    router.push("/dashboard");
+    router.push("/dashboard"); // Updated to Congo dashboard
   };
 
   return (
@@ -137,7 +116,6 @@ export default function VideoPage() {
           ))}
         </div>
 
-        {/* Section du lecteur vidéo */}
         {currentVideo && (
           <div className="mt-8 bg-white-500 shadow-lg rounded-lg p-6">
             <h2 className="text-2xl font-semibold text-black-600 mb-4">Lecture en cours</h2>
@@ -151,7 +129,6 @@ export default function VideoPage() {
           </div>
         )}
 
-        {/* Afficher le bouton "Retour au tableau de bord" si les deux vidéos sont vues */}
         {allVideosWatched && (
           <div className="mt-8 text-center">
             <button

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db'; // Replace with your database connection
+import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
   try {
@@ -10,9 +10,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Invalid input data or missing email' }, { status: 400 });
     }
 
-    // Update data in the database
-    const updatedUser = await db.user.update({
-      where: { email: data.email }, // Filter by email
+    // Update data in the database (using congoUser)
+    const updatedUser = await db.congoUser.update({
+      where: { email: data.email },
       data: {
         dispositif: data.dispositif || null,
         engagement: data.engagement || null,
@@ -33,8 +33,6 @@ export async function POST(req: Request) {
   }
 }
 
-
-// Add a GET route to fetch the user's questionnaire data
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -44,7 +42,8 @@ export async function GET(req: Request) {
       return NextResponse.json({ message: 'Email is required' }, { status: 400 });
     }
 
-    const userData = await db.user.findUnique({
+    // Fetch data using congoUser
+    const userData = await db.congoUser.findUnique({
       where: { email },
       select: {
         dispositif: true,

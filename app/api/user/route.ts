@@ -7,9 +7,7 @@ const userSchema = z.object({
   fullName: z.string().min(1, "Full Name is required").max(100),
   email: z.string().min(1, "Email is required").email("Invalid email"),
   companyName: z.string().min(1, "Company Name is required"),
-  password: z
-    .string()
-    .min(1, "Password is required")
+  password: z.string().min(1, "Password is required")
 });
 
 export async function POST(req: Request) {
@@ -17,43 +15,49 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { email, fullName, password, companyName } = userSchema.parse(body);
 
-    // Check if email already exists
-    const existingUserByEmail = await db.user.findUnique({
+    // Check if email already exists in Congo schema
+    const existingUserByEmail = await db.congoUser.findUnique({
       where: { email },
     });
 
     if (existingUserByEmail) {
       return NextResponse.json(
-        { error: "Email Deja Utiliser" },
+        { error: "Email Déjà Utilisé" },
         { status: 409 }
       );
     }
 
-    // Check if company name already exists
-    const existingUserByCompanyName = await db.user.findUnique({
+    // Check if company name already exists in Congo schema
+    const existingUserByCompanyName = await db.congoUser.findUnique({
       where: { companyName },
     });
 
     if (existingUserByCompanyName) {
       return NextResponse.json(
-        { error: "Nom de societe deja utiliser" },
+        { error: "Nom de société déjà utilisé" },
         { status: 409 }
       );
     }
 
     const hashedPassword = await hash(password, 10);
 
-    await db.user.create({
+    // Create user in Congo schema
+    await db.congoUser.create({
       data: {
         fullName,
         email,
         companyName,
         password: hashedPassword,
+        // Default values for other required fields
+        video1: false,
+        video2: false,
+        gotAttestation: false,
+        date: new Date()
       },
     });
     
     return NextResponse.json(
-      { message: "User created successfully" },
+      { message: "Utilisateur créé avec succès" },
       { status: 201 }
     );
     
@@ -64,8 +68,9 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+    console.error("Registration error:", error);
     return NextResponse.json(
-      { error: "Something went wrong. Please try again." },
+      { error: "Une erreur s'est produite. Veuillez réessayer." },
       { status: 500 }
     );
   }

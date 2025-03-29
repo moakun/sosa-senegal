@@ -28,23 +28,30 @@ export default function Login() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    const signInData = await signIn('credentials', {
-      redirect: false,
-      email: values.email,
-      password: values.password,
-    });
-
-    if (signInData?.error) {
-      toast({
-        title: 'Error',
-        description: 'Email ou Mots de passe incorrect',
-        variant: 'destructive',
+    setIsLoading(true);
+    try {
+      const signInData = await signIn('credentials', {
+        redirect: false,
+        email: values.email,
+        password: values.password,
+        schema: 'congo' // Only Congo-specific change
       });
-    } else if (signInData?.ok) {
-      router.refresh();
-      router.push('/dashboard');
+
+      if (signInData?.error) {
+        toast({
+          title: 'Error',
+          description: 'Email ou Mots de passe incorrect',
+          variant: 'destructive',
+        });
+      } else if (signInData?.ok) {
+        router.refresh();
+        router.push('/dashboard');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -94,15 +101,26 @@ export default function Login() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-[#135ced] hover:bg-[#67a5f0] text-white-300 font-semibold py-3 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105"
+                disabled={isLoading}
+                className="w-full bg-[#135ced] hover:bg-[#67a5f0] text-white-300 font-semibold py-3 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105 flex justify-center items-center gap-2"
               >
-                Connectez-vous!
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Connexion...
+                  </>
+                ) : (
+                  'Connectez-vous!'
+                )}
               </button>
             </form>
           </div>
           <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 text-center">
             <p className="text-sm text-gray-600">
-               Pas de Compte?{' '}
+              Pas de Compte?{' '}
               <a href="/register" className="font-medium text-[#135ced] hover:text-[#67a5f0]">
                 Enregistrez-vous ici!
               </a>

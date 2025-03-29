@@ -5,7 +5,7 @@ import { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { User } from "next-auth";
 
-export const authOptions: NextAuthOptions = {
+export const AuthOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   session: {
     strategy: 'jwt',
@@ -22,7 +22,8 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const existingUser = await db.user.findUnique({
+        // Query the Congo-specific user table
+        const existingUser = await db.congoUser.findUnique({
           where: { email: credentials.email },
         });
 
@@ -36,14 +37,13 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Ensure the returned object matches the expected User type
         return {
-          id: existingUser.id.toString(),  // id is still required
+          id: existingUser.id.toString(),
           email: existingUser.email,
           fullName: existingUser.fullName,
           companyName: existingUser.companyName,
-          image: null, // Optional: set this if you have an image
-          name: existingUser.fullName, // Required: this can be the full name or another field
+          image: null,
+          name: existingUser.fullName,
         };
       },
     }),
@@ -51,18 +51,17 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        // Store user information in JWT token
         return {
           ...token,
           email: user.email,
           fullName: user.fullName,
           companyName: user.companyName,
+          schema: 'congo' // Add Congo schema to token
         };
       }
       return token;
     },
     async session({ session, token }) {
-      // Add token data to the session
       return {
         ...session,
         user: {
@@ -70,6 +69,7 @@ export const authOptions: NextAuthOptions = {
           email: token.email,
           fullName: token.fullName,
           companyName: token.companyName,
+          schema: token.schema // Include schema in session
         },
       };
     },
