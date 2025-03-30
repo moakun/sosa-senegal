@@ -8,8 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-export default function PostQuiz() {
+export default function CongoPostQuiz() {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const [formData, setFormData] = useState({
     dispositif: '',
@@ -23,8 +24,7 @@ export default function PostQuiz() {
     intention: '',
   });
 
-  const [loading, setLoading] = useState(false); // Pour gérer l'état de chargement
-  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -40,8 +40,9 @@ export default function PostQuiz() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: session?.user?.email, // Remplacez ceci par l'email réel
+          email: session?.user?.email,
           ...formData,
+          schema: 'congo' // Only Congo-specific change
         }),
       });
   
@@ -56,8 +57,8 @@ export default function PostQuiz() {
           certifierISO: '',
           mepSystem: '',
           intention: '',
-        }); // Réinitialiser le formulaire
-        router.push('/dashboard');
+        });
+        router.push('/dashboard'); // Updated to Congo dashboard
       } else {
         alert('Échec de la mise à jour des données.');
       }
@@ -86,7 +87,7 @@ export default function PostQuiz() {
       <Card className="w-full max-w-md bg-white-500 rounded-lg shadow-lg border-none">
         <CardHeader className="space-y-2 p-4">
           <CardTitle className="text-2xl font-bold text-center text-blue-500">
-            Questionnaire
+            Questionnaire Congo
           </CardTitle>
           <CardDescription className="text-center text-gray-500 text-sm">
             Répondez par Oui, Non ou une date.
@@ -115,7 +116,15 @@ export default function PostQuiz() {
               disabled={loading}
               className={`w-full mt-6 text-white-500 rounded-md py-2 text-sm font-medium ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}
             >
-              {loading ? 'Chargement...' : 'Envoyer'}
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Envoi en cours...
+                </span>
+              ) : 'Envoyer'}
             </Button>
           </form>
         </CardContent>

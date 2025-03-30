@@ -1,30 +1,38 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db'; // Replace with your database connection
+import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
   try {
     const data = await req.json();
 
-        // Validate required fields
-        if (!data || !data.email) {
-            return NextResponse.json({ message: 'Invalid input data or missing email' }, { status: 400 });
-          }
+    // Validate required fields
+    if (!data || !data.email) {
+      return NextResponse.json(
+        { message: 'Invalid input data or missing email' }, 
+        { status: 400 }
+      );
+    }
 
-             // Update data in the database
-    const updatedUser = await db.user.update({
-        where: { email: data.email }, // Filter by email
-        data: {
-          score : data.score || null
-        },
-      });
+    // Update score in Congo database
+    const updatedUser = await db.congoUser.update({
+      where: { email: data.email },
+      data: {
+        score: data.score || null
+      },
+    });
 
-      return NextResponse.json({ message: 'Data updated successfully', updatedUser }, { status: 200 });
+    return NextResponse.json(
+      { message: 'Score updated successfully', updatedUser },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error('Error updating data:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    console.error('Error updating score:', error);
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
-
 
 export async function GET(req: Request) {
   try {
@@ -32,10 +40,14 @@ export async function GET(req: Request) {
     const email = searchParams.get('email');
 
     if (!email) {
-      return NextResponse.json({ message: 'Email is required' }, { status: 400 });
+      return NextResponse.json(
+        { message: 'Email is required' },
+        { status: 400 }
+      );
     }
 
-    const userData = await db.user.findUnique({
+    // Fetch score from Congo database
+    const userData = await db.congoUser.findUnique({
       where: { email },
       select: {
         score: true,
@@ -43,25 +55,40 @@ export async function GET(req: Request) {
     });
 
     if (!userData) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+      return NextResponse.json(
+        { message: 'User not found' },
+        { status: 404 }
+      );
     }
 
-    // If score is null or <= 8, handle accordingly
+    // Score evaluation logic
     if (userData.score === null) {
       return NextResponse.json(
-        { success: false, message: 'No previous exam score found. First exam attempt.' },
-        { status: 200 } // Success status, but with a false success flag
+        { 
+          success: false, 
+          message: 'No previous exam score found. First exam attempt.' 
+        },
+        { status: 200 }
       );
     } else if (userData.score < 7) {
       return NextResponse.json(
-        { success: false, message: 'Score is not sufficient (must be greater than 8).' },
-        { status: 200 } // Success status, but with a false success flag
+        { 
+          success: false, 
+          message: 'Score is not sufficient (must be greater than 8).' 
+        },
+        { status: 200 }
       );
     }
 
-    return NextResponse.json({ success: true, userData }, { status: 200 });
+    return NextResponse.json(
+      { success: true, userData },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error('Error fetching user data:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    console.error('Error fetching score:', error);
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

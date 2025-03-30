@@ -12,9 +12,9 @@ import sosa from "../public/assets/sosal.png";
 import Results from './Results'
 import Lse from "../public/assets/lse.jpeg";
 
-const Quiz: React.FC = () => {
+const CongoQuiz: React.FC = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [score, setScore] = useState<number>(0) // Default score is 0
+  const [score, setScore] = useState<number>(0)
   const [showScore, setShowScore] = useState(false)
   const [userAnswers, setUserAnswers] = useState<(number | null)[]>(new Array(questions.length).fill(null))
   const { toast } = useToast()
@@ -28,7 +28,7 @@ const Quiz: React.FC = () => {
 
   const fetchUserScore = async (email: string) => {
     try {
-      const response = await fetch(`/api/score?email=${encodeURIComponent(email)}`);
+      const response = await fetch(`/api/score?email=${encodeURIComponent(email)}&schema=congo`);
       if (!response.ok) {
         throw new Error('Failed to fetch user score');
       }
@@ -36,49 +36,43 @@ const Quiz: React.FC = () => {
       const data = await response.json();
   
       if (data.success) {
-        // If there's a valid score
         if (data.userData?.score !== null) {
           const score = data.userData.score;
-  
           if (score >= 7) {
-            // If score is 8 or above, show it
             setScore(score);
             setShowScore(true);
           } else {
-            // If score is less than 8
             setScore(score);
             setShowScore(false);
             toast({
-              title: "Score inférieur",
-              description: `Votre score est ${score}, vous devez repasser l'examen.` ,
+              title: "Score insuffisant",
+              description: `Votre score est ${score}, vous devez repasser l'examen.`,
               variant: "default",
             });
           }
         } else {
-          // If no score (first exam attempt)
           setScore(0);
           setShowScore(false);
           toast({
-            title: "Première tentative d'examen",
-            description: "Bonne chance pour votre examen !" ,
+            title: "Premier examen",
+            description: "Bonne chance pour votre examen !",
             variant: "default",
           });
         }
       } else {
-        // Handle case when success is false
         console.log(data.message || "Erreur inconnue");
         toast({
           title: "Message",
-          description: data.message || "Impossible de récupérer le score de l'utilisateur",
+          description: data.message || "Impossible de récupérer le score",
           variant: "default",
         });
       }
     } catch (error) {
-      console.error('Erreur lors de la récupération du score de l\'utilisateur:', error);
+      console.error('Erreur:', error);
       toast({
-        title: "Message",
-        description: "Impossible de récupérer le score de l'utilisateur",
-        variant: "default",
+        title: "Erreur",
+        description: "Impossible de récupérer le score",
+        variant: "destructive",
       });
     }
   };
@@ -90,7 +84,7 @@ const Quiz: React.FC = () => {
 
     const isCorrect = questions[currentQuestion].answerOptions[answerIndex].isCorrect
     if (isCorrect) {
-      setScore((prevScore) => prevScore + 1) // Increment score directly
+      setScore((prevScore) => prevScore + 1)
     }
   }
 
@@ -120,7 +114,8 @@ const Quiz: React.FC = () => {
         },
         body: JSON.stringify({
           email: session.user.email,
-          score, // Send raw score without formatting
+          score,
+          schema: 'congo' // Congo-specific change
         }),
       })
 
@@ -135,7 +130,7 @@ const Quiz: React.FC = () => {
         description: "Votre score a été enregistré avec succès.",
       })
     } catch (error) {
-      console.error('Erreur lors de l\'enregistrement du score:', error)
+      console.error('Erreur:', error)
       toast({
         title: "Erreur",
         description: "Impossible d'enregistrer votre score",
@@ -146,14 +141,14 @@ const Quiz: React.FC = () => {
 
   const restartQuiz = () => {
     setCurrentQuestion(0)
-    setScore(0) // Reset score to 0
+    setScore(0)
     setShowScore(false)
     setUserAnswers(new Array(questions.length).fill(null))
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white-500 p-4">
-      {/* Logo Section */}
+      {/* Logo Section - Kept exactly the same */}
       <div className="flex justify-center gap-8 mb-8 w-full max-w-7xl">
         <Image src={Lse} alt="Logo" width={80} height={60} />
         <Image src={sosa} alt="Logo" width={150} height={60} />
@@ -162,7 +157,7 @@ const Quiz: React.FC = () => {
       <Card className="w-full max-w-7xl bg-white shadow-lg">
         <CardHeader>
           <CardTitle className="text-center">
-            Quiz sur l'éthique et la lutte contre la corruption
+            Quiz sur l'éthique et la lutte contre la corruption (Congo)
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -180,18 +175,18 @@ const Quiz: React.FC = () => {
               <div className="space-y-2">
                 {questions[currentQuestion].answerOptions.map((answerOption, index) => (
                   <Button
-                  key={index}
-                  onClick={() => handleAnswerOptionClick(index)}
-                  variant={userAnswers[currentQuestion] === index ? "default" : "outline"}
-                  className={`w-full justify-start h-auto py-3 px-4 text-left 
-                    whitespace-normal min-h-[80px] break-words ${
-                      userAnswers[currentQuestion] === index
-                        ? 'bg-blue-500 text-white hover:bg-blue-600'
-                        : 'bg-white text-black hover:bg-blue-100'
-                    }`}
-                >
-                  {answerOption.answer}
-                </Button>
+                    key={index}
+                    onClick={() => handleAnswerOptionClick(index)}
+                    variant={userAnswers[currentQuestion] === index ? "default" : "outline"}
+                    className={`w-full justify-start h-auto py-3 px-4 text-left 
+                      whitespace-normal min-h-[80px] break-words ${
+                        userAnswers[currentQuestion] === index
+                          ? 'bg-blue-500 text-white hover:bg-blue-600'
+                          : 'bg-white text-black hover:bg-blue-100'
+                      }`}
+                  >
+                    {answerOption.answer}
+                  </Button>
                 ))}
               </div>
             </>
@@ -220,4 +215,4 @@ const Quiz: React.FC = () => {
   )
 }
 
-export default Quiz
+export default CongoQuiz

@@ -16,18 +16,11 @@ export function Certificate({ userName, company, date, courseName }: Certificate
 
       <div className="relative h-full flex flex-col items-center justify-between py-12">
         {/* Logo Container */}
-        <div className="flex justify-center items-center gap-12 w-full mb-8 px-12">
+        <div className="flex justify-center items-center">
           <div className="flex-1 flex justify-end">
             <img 
               src="/assets/sosal.png" 
               alt="Logo de SOGEA SATOM" 
-              className="h-24 w-auto object-contain"
-            />
-          </div>
-          <div className="flex-1 flex justify-start">
-            <img 
-              src="/assets/lse.jpeg" 
-              alt="Logo LSE" 
               className="h-24 w-auto object-contain"
             />
           </div>
@@ -36,7 +29,7 @@ export function Certificate({ userName, company, date, courseName }: Certificate
         {/* Certificate Content */}
         <div className="space-y-8 text-center">
           <p className="text-xl text-gray-800">
-            Les sociétés LSE et SOGEA SATOM SÉNÉGAL Certifient que
+            La sociétés SOGEA SATOM CONGO Certifie que
           </p>
           <p className="text-2xl font-semibold text-gray-900">
             {userName.toUpperCase()} de la société {company.toUpperCase()}
