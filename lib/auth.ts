@@ -22,8 +22,8 @@ export const AuthOptions: NextAuthOptions = {
           return null;
         }
 
-        // Query the Congo-specific user table
-        const existingUser = await db.congoUser.findUnique({
+        // Query the Senegal-specific user table
+        const existingUser = await db.senegalUser.findUnique({
           where: { email: credentials.email },
         });
 
@@ -56,7 +56,7 @@ export const AuthOptions: NextAuthOptions = {
           email: user.email,
           fullName: user.fullName,
           companyName: user.companyName,
-          schema: 'congo' // Add Congo schema to token
+          schema: 'senegal' // Add senegal schema to token
         };
       }
       return token;

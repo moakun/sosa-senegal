@@ -9,12 +9,12 @@ export default function Video() {
     {
       id: 1,
       title: "Première Partie",
-      url: "https://d21ulo4r1z07kx.cloudfront.net/FinalCongoOne.mp4", // Updated to Congo videos
+      url: "https://d21ulo4r1z07kx.cloudfront.net/FinalSenegalOne.mp4", // Updated to  videos
     },
     {
       id: 2,
       title: "Deuxième Partie",
-      url: "https://d21ulo4r1z07kx.cloudfront.net/FinalCongoTwo.mp4", // Updated to Congo videos
+      url: "https://d21ulo4r1z07kx.cloudfront.net/FinalSenegalTwo.mp4", // Updated to  videos
     },
   ];
 
@@ -26,11 +26,11 @@ export default function Video() {
   useEffect(() => {
     if (status === "loading") return;
     if (!session || !session.user?.email) {
-      router.push("/login"); // Updated to Congo login
+      router.push("/login"); // Updated to login
     } else {
       const fetchVideoStatus = async () => {
         try {
-          const response = await fetch(`/api/video?email=${session.user.email}&schema=congo`); // Added Congo schema
+          const response = await fetch(`/api/video?email=${session.user.email}&schema=senegal`); // Added  schema
           
           if (!response.ok) {
             throw new Error("Échec de la récupération du statut de la vidéo");
@@ -69,7 +69,7 @@ export default function Video() {
         body: JSON.stringify({
           email: session.user.email,
           [videoKey]: true,
-          schema: 'congo' // Added Congo schema
+          schema: 'senegal' // Added senegal schema
         }),
       });
 
@@ -84,7 +84,7 @@ export default function Video() {
   const allVideosWatched = videoStates.video1 && videoStates.video2;
 
   const handleBackToDashboard = () => {
-    router.push("/dashboard"); // Updated to Congo dashboard
+    router.push("/dashboard"); // Updated to  dashboard
   };
 
   return (

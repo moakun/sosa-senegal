@@ -24,12 +24,19 @@ export function Certificate({ userName, company, date, courseName }: Certificate
               className="h-24 w-auto object-contain"
             />
           </div>
+          <div className="flex-1 flex justify-end">
+            <img 
+              src="/assets/lse.jpeg" 
+              alt="Logo de SOGEA SATOM" 
+              className="h-24 w-auto object-contain"
+            />
+          </div>
         </div>
 
         {/* Certificate Content */}
         <div className="space-y-8 text-center">
           <p className="text-xl text-gray-800">
-            La sociétés SOGEA SATOM CONGO Certifie que
+            Les sociétés LSE & SOGEA SATOM SÉNÉGAL Certifie que
           </p>
           <p className="text-2xl font-semibold text-gray-900">
             {userName.toUpperCase()} de la société {company.toUpperCase()}

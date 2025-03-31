@@ -10,8 +10,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Invalid input data or missing email' }, { status: 400 });
     }
 
-    // Update data in the database (using congoUser)
-    const updatedUser = await db.congoUser.update({
+    // Update data in the database (using senegalUser)
+    const updatedUser = await db.senegalUser.update({
       where: { email: data.email },
       data: {
         dispositif: data.dispositif || null,
@@ -42,8 +42,8 @@ export async function GET(req: Request) {
       return NextResponse.json({ message: 'Email is required' }, { status: 400 });
     }
 
-    // Fetch data using congoUser
-    const userData = await db.congoUser.findUnique({
+    // Fetch data using senegalUser
+    const userData = await db.senegalUser.findUnique({
       where: { email },
       select: {
         dispositif: true,

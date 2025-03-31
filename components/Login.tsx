@@ -37,7 +37,7 @@ export default function Login() {
         redirect: false,
         email: values.email,
         password: values.password,
-        schema: 'congo' // Only Congo-specific change
+        schema: 'senegal' // Only Senegal-specific change
       });
 
       if (signInData?.error) {

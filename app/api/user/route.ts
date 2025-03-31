@@ -15,8 +15,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { email, fullName, password, companyName } = userSchema.parse(body);
 
-    // Check if email already exists in Congo schema
-    const existingUserByEmail = await db.congoUser.findUnique({
+    // Check if email already exists in Senegal schema
+    const existingUserByEmail = await db.senegalUser.findUnique({
       where: { email },
     });
 
@@ -27,8 +27,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Check if company name already exists in Congo schema
-    const existingUserByCompanyName = await db.congoUser.findUnique({
+    // Check if company name already exists in Senegal schema
+    const existingUserByCompanyName = await db.senegalUser.findUnique({
       where: { companyName },
     });
 
@@ -41,8 +41,8 @@ export async function POST(req: Request) {
 
     const hashedPassword = await hash(password, 10);
 
-    // Create user in Congo schema
-    await db.congoUser.create({
+    // Create user in Senegal schema
+    await db.senegalUser.create({
       data: {
         fullName,
         email,

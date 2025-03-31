@@ -14,8 +14,8 @@ export async function GET(request) {
       );
     }
 
-    // Query the Congo database
-    const user = await db.congoUser.findUnique({
+    // Query the Senegal database
+    const user = await db.senegalUser.findUnique({
       where: { email },
       select: {
         video1: true,
@@ -60,8 +60,8 @@ export async function PATCH(request) {
       );
     }
 
-    // Update in Congo database
-    await db.congoUser.update({
+    // Update in Senegal database
+    await db.senegalUser.update({
       where: { email },
       data: {
         video1: video1 !== undefined ? video1 : undefined,

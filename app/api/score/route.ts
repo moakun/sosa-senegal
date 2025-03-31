@@ -13,8 +13,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Update score in Congo database
-    const updatedUser = await db.congoUser.update({
+    // Update score in Senegal database
+    const updatedUser = await db.senegalUser.update({
       where: { email: data.email },
       data: {
         score: data.score || null
@@ -46,8 +46,8 @@ export async function GET(req: Request) {
       );
     }
 
-    // Fetch score from Congo database
-    const userData = await db.congoUser.findUnique({
+    // Fetch score from Senegal database
+    const userData = await db.senegalUser.findUnique({
       where: { email },
       select: {
         score: true,

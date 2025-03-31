@@ -51,14 +51,14 @@ export default function Register() {
           email: values.email,
           companyName: values.companyName,
           password: values.password,
-          schema: 'congo' // Only Congo-specific change
+          schema: 'senegal' // Only Senegal-specific change
         }),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        router.push("/login/congo"); // Updated to Congo login
+        router.push("/login"); // Updated to login
       } else {
         setServerError(result.error || "An unexpected error occurred");
       }
@@ -73,7 +73,7 @@ export default function Register() {
         <div className="bg-white-500 rounded-2xl shadow-xl overflow-hidden">
           <div className="p-4">
             <h2 className="text-3xl font-bold text-center mb-8 text-[#135ced]">
-              Créer un compte Congo
+              Créer un compte
             </h2>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
               {serverError && (
@@ -100,7 +100,7 @@ export default function Register() {
                   {...form.register("companyName")}
                   id="societe"
                   type="text"
-                  placeholder="Entreprise Congo"
+                  placeholder="Entreprise"
                   required
                   className="w-full px-3 py-2 border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#135ced]"
                 />

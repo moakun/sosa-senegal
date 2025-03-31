@@ -12,7 +12,7 @@ import sosa from "../public/assets/sosal.png";
 import Results from './Results'
 import Lse from "../public/assets/lse.jpeg";
 
-const CongoQuiz: React.FC = () => {
+const Quiz: React.FC = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [score, setScore] = useState<number>(0)
   const [showScore, setShowScore] = useState(false)
@@ -28,7 +28,7 @@ const CongoQuiz: React.FC = () => {
 
   const fetchUserScore = async (email: string) => {
     try {
-      const response = await fetch(`/api/score?email=${encodeURIComponent(email)}&schema=congo`);
+      const response = await fetch(`/api/score?email=${encodeURIComponent(email)}&schema=senegal`);
       if (!response.ok) {
         throw new Error('Failed to fetch user score');
       }
@@ -115,7 +115,7 @@ const CongoQuiz: React.FC = () => {
         body: JSON.stringify({
           email: session.user.email,
           score,
-          schema: 'congo' // Congo-specific change
+          schema: 'senegal' // senegal-specific change
         }),
       })
 
@@ -157,7 +157,7 @@ const CongoQuiz: React.FC = () => {
       <Card className="w-full max-w-7xl bg-white shadow-lg">
         <CardHeader>
           <CardTitle className="text-center">
-            Quiz sur l'éthique et la lutte contre la corruption (Congo)
+            Quiz sur l'éthique et la lutte contre la corruption
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -215,4 +215,4 @@ const CongoQuiz: React.FC = () => {
   )
 }
 
-export default CongoQuiz
+export default Quiz

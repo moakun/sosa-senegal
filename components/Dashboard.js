@@ -27,7 +27,7 @@ export default function Dashboard() {
 
     const fetchAttestationStatus = async () => {
       try {
-        const response = await fetch(`/api/certinfo?email=${session.user.email}&schema=congo`, { // Added schema=congo
+        const response = await fetch(`/api/certinfo?email=${session.user.email}&schema=senegal`, { // Added schema=senegal
           method: 'GET',
         });
     
@@ -47,7 +47,7 @@ export default function Dashboard() {
   
     const fetchVideoData = async () => {
       try {
-        const response = await fetch(`/api/video?email=${session.user.email}&schema=congo`); // Added schema=congo
+        const response = await fetch(`/api/video?email=${session.user.email}&schema=senegal`); // Added schema=senegal
         if (!response.ok) {
           throw new Error(`Échec du fetch des données vidéo. Statut: ${response.status}`);
         }
@@ -71,7 +71,7 @@ export default function Dashboard() {
     
     const fetchQuestionnaireData = async () => {
       try {
-        const response = await fetch(`/api/questionnaire?email=${session.user.email}&schema=congo`); // Added schema=congo
+        const response = await fetch(`/api/questionnaire?email=${session.user.email}&schema=senegal`); // Added schema=senegal
         if (!response.ok) {
           throw new Error('échec du fetch des données du questionnaire');
         }
@@ -95,7 +95,7 @@ export default function Dashboard() {
 
     const fetchQuizData = async () => {
       try {
-        const response = await fetch(`/api/score?email=${session.user.email}&schema=congo`); // Added schema=congo
+        const response = await fetch(`/api/score?email=${session.user.email}&schema=senegal`); // Added schema=senegal
         if (!response.ok) {
           throw new Error('Échec du fetch des données du quiz');
         }
@@ -124,7 +124,7 @@ export default function Dashboard() {
 
   /* 
    * ALL UI CODE BELOW REMAINS EXACTLY THE SAME AS YOUR ORIGINAL
-   * Only changed the API endpoints above by adding ?schema=congo
+   * Only changed the API endpoints above by adding ?schema=senegal
    */
    
   const calculateOverallProgress = () => {

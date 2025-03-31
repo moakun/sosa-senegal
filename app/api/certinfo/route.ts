@@ -19,7 +19,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    const user = await db.congoUser.findUnique({
+    const user = await db.senegalUser.findUnique({
       where: { email },
       select: { 
         gotAttestation: true,
@@ -30,7 +30,7 @@ export async function GET(req: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Utilisateur Congo non trouvé' },
+        { error: 'Utilisateur Sénégal non trouvé' },
         { status: 404 }
       );
     }
@@ -43,7 +43,7 @@ export async function GET(req: Request) {
       }
     });
   } catch (error) {
-    console.error('[CONGO_ATTESTATION_GET] Error:', error);
+    console.error('[SENEGAL_ATTESTATION_GET] Error:', error);
     return NextResponse.json(
       { error: 'Erreur du serveur' },
       { status: 500 }
@@ -57,20 +57,20 @@ export async function POST(req: Request) {
     const { email } = postSchema.parse(body);
 
     // Verify user exists before update
-    const existingUser = await db.congoUser.findUnique({
+    const existingUser = await db.senegalUser.findUnique({
       where: { email },
       select: { id: true }
     });
 
     if (!existingUser) {
       return NextResponse.json(
-        { error: 'Utilisateur Congo non trouvé' },
+        { error: 'Utilisateur Sénégal non trouvé' },
         { status: 404 }
       );
     }
 
     // Update attestation status
-    const updatedUser = await db.congoUser.update({
+    const updatedUser = await db.senegalUser.update({
       where: { email },
       data: { 
         gotAttestation: true,
@@ -88,7 +88,7 @@ export async function POST(req: Request) {
       attestationDate: updatedUser.attestationDate
     });
   } catch (error) {
-    console.error('[CONGO_ATTESTATION_POST] Error:', error);
+    console.error('[SENEGAL_ATTESTATION_POST] Error:', error);
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(
