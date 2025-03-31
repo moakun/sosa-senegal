@@ -46,7 +46,7 @@ const Hero = ({
               <p className="text-black-500 mt-4 mb-6">
               Sogea Satom Sénégal
               </p>
-              <Link href="/dashboard">
+              <Link href="/register">
               <ButtonPrimary>Commencer!</ButtonPrimary>
               </Link>
             </div>

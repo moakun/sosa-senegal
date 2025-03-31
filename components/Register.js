@@ -24,6 +24,7 @@ const FormSchema = z
 
 export default function Register() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState("");
 
@@ -40,6 +41,7 @@ export default function Register() {
 
   const onSubmit = async (values) => {
     setServerError("");
+    setIsLoading(true); // Start loading
     try {
       const response = await fetch("/api/user", {
         method: "POST",
@@ -64,6 +66,8 @@ export default function Register() {
       }
     } catch {
       setServerError("Failed to connect to the server. Please try again.");
+    }  finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -164,11 +168,40 @@ export default function Register() {
                   {form.formState.errors.confirmPassword.message}
                 </p>
               )}
-              <button
+             <button
                 type="submit"
-                className="w-full bg-[#135ced] hover:bg-[#67a5f0] text-white-300 font-semibold py-3 px-4 rounded-md transition-all duration-300"
+                disabled={isLoading} // Disable button when loading
+                className={`w-full ${
+                  isLoading ? "bg-gray-400" : "bg-[#135ced] hover:bg-[#67a5f0]"
+                } text-white-300 font-semibold py-3 px-4 rounded-md transition-all duration-300`}
               >
-                Enregistrement
+                {isLoading ? (
+                  <div className="flex items-center justify-center">
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8H4z"
+                      ></path>
+                    </svg>
+                    <span className="ml-2">Enregistrement...</span>
+                  </div>
+                ) : (
+                  "Enregistrement"
+                )}
               </button>
             </form>
           </div>
