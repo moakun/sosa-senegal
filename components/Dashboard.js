@@ -176,7 +176,7 @@ export default function Dashboard() {
         <h1 className="text-4xl font-bold text-white-500 mb-2">
           Progrès de la formation &quot;{session?.user?.fullName?.toUpperCase() || "UTILISATEUR"}&quot;
         </h1>
-        <p className="text-black-500 mb-4">Suivez votre parcours d'apprentissage !</p>
+        <p className="text-black-500 mb-4">Suivez votre parcours d&apos;apprentissage !</p>
 
         <ProgressBar progress={overallProgress} />
 
@@ -246,7 +246,7 @@ export default function Dashboard() {
         {isDownloadButtonVisible && (
           <Link href='/attestation'>
             <Button className="w-full mt-8 text-white-500 bg-blue-500 hover:bg-blue-700">
-              Télécharger l'attestation
+              Télécharger l&apos;attestation
             </Button>
           </Link>
         )}
