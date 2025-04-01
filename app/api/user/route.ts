@@ -3,6 +3,22 @@ import { db } from "@/lib/db";
 import { hash } from "bcryptjs";
 import * as z from "zod";
 
+// Define types
+type UserData = {
+  fullName: string;
+  email: string;
+  companyName: string;
+  password: string;
+};
+
+type UserResponse = Omit<UserData, 'password'> & {
+  id: number;
+  video1: boolean;
+  video2: boolean;
+  gotAttestation: boolean;
+  date: Date;
+};
+
 const userSchema = z.object({
   fullName: z.string().min(1, "Full Name is required").max(100),
   email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -10,11 +26,10 @@ const userSchema = z.object({
   password: z.string().min(1, "Password is required").min(8, "Password must be at least 8 characters"),
 });
 
-export async function POST(req: Request) {
+export async function POST(req: Request): Promise<NextResponse> {
   try {
     const body = await req.json();
     
-    // Validate request body
     if (!body) {
       return NextResponse.json(
         { error: "Request body is required" },
@@ -65,7 +80,7 @@ export async function POST(req: Request) {
     // Create user with the determined ID
     const newUser = await db.user.create({
       data: {
-        id: nextId, // Explicitly set the ID
+        id: nextId,
         fullName,
         email,
         companyName,
@@ -77,11 +92,11 @@ export async function POST(req: Request) {
       },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: _, ...userWithoutPassword } = newUser;
+    // Properly typed destructuring
+    const { password: omittedPassword, ...userWithoutPassword } = newUser;
 
     return NextResponse.json(
-      { user: userWithoutPassword, message: "User created successfully" },
+      { user: userWithoutPassword as UserResponse, message: "User created successfully" },
       { status: 201 }
     );
     
@@ -93,7 +108,10 @@ export async function POST(req: Request) {
       );
     }
     
-    console.error("Registration error:", error);
+    if (error instanceof Error) {
+      console.error("Registration error:", error.message);
+    }
+    
     return NextResponse.json(
       { error: "An error occurred. Please try again." },
       { status: 500 }
