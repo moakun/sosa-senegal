@@ -21,7 +21,7 @@ export default function Dashboard() {
     if (status === 'loading') return;
 
     if (!session || !session.user?.email) {
-      console.error('L\'utilisateur n\'est pas connecté');
+      console.error('L&apos;utilisateur n&apos;est pas connecté');
       return;
     }
 
@@ -32,7 +32,7 @@ export default function Dashboard() {
         });
     
         if (!response.ok) {
-          throw new Error('échec du fetch du statut de l\'attestation');
+          throw new Error('échec du fetch du statut de l&apos;attestation');
         }
     
         const data = await response.json();
@@ -41,7 +41,7 @@ export default function Dashboard() {
           setGotAttestation(data.gotAttestation);
         }
       } catch (error) {
-        console.error('échec du fetch du statut de l\'attestation:', error);
+        console.error('échec du fetch du statut de l&apos;attestation:', error);
       }
     };
   
