@@ -28,7 +28,7 @@ const Quiz: React.FC = () => {
 
   const fetchUserScore = async (email: string) => {
     try {
-      const response = await fetch(`/api/score?email=${encodeURIComponent(email)}&schema=senegal`);
+      const response = await fetch(`/api/score?email=${encodeURIComponent(email)}`);
       if (!response.ok) {
         throw new Error('Failed to fetch user score');
       }
@@ -37,7 +37,7 @@ const Quiz: React.FC = () => {
   
       if (data.success) {
         if (data.userData?.score !== null) {
-          const score = data.userData.score;
+          const score = Math.min(data.userData.score, questions.length);
           if (score >= 7) {
             setScore(score);
             setShowScore(true);
@@ -78,14 +78,24 @@ const Quiz: React.FC = () => {
   };
 
   const handleAnswerOptionClick = (answerIndex: number) => {
-    const newUserAnswers = [...userAnswers]
-    newUserAnswers[currentQuestion] = answerIndex
-    setUserAnswers(newUserAnswers)
+    const newUserAnswers = [...userAnswers];
+    const previousAnswer = newUserAnswers[currentQuestion];
+    
+    newUserAnswers[currentQuestion] = answerIndex;
+    setUserAnswers(newUserAnswers);
 
-    const isCorrect = questions[currentQuestion].answerOptions[answerIndex].isCorrect
-    if (isCorrect) {
-      setScore((prevScore) => prevScore + 1)
-    }
+    const isCorrect = questions[currentQuestion].answerOptions[answerIndex].isCorrect;
+    const wasCorrect = previousAnswer !== null && 
+                      questions[currentQuestion].answerOptions[previousAnswer].isCorrect;
+
+    setScore(prevScore => {
+      if (isCorrect && !wasCorrect) {
+        return prevScore + 1;
+      } else if (!isCorrect && wasCorrect) {
+        return prevScore - 1;
+      }
+      return prevScore;
+    });
   }
 
   const handlePrevious = () => {
@@ -107,6 +117,8 @@ const Quiz: React.FC = () => {
     if (!session?.user?.email) return
 
     try {
+      const finalScore = Math.min(score, questions.length);
+      
       const response = await fetch('/api/score', {
         method: 'POST',
         headers: {
@@ -114,8 +126,7 @@ const Quiz: React.FC = () => {
         },
         body: JSON.stringify({
           email: session.user.email,
-          score,
-          schema: 'senegal' // senegal-specific change
+          score: finalScore
         }),
       })
 
@@ -148,7 +159,6 @@ const Quiz: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white-500 p-4">
-      {/* Logo Section - Kept exactly the same */}
       <div className="flex justify-center gap-8 mb-8 w-full max-w-7xl">
         <Image src={Lse} alt="Logo" width={80} height={60} />
         <Image src={sosa} alt="Logo" width={150} height={60} />
@@ -162,7 +172,7 @@ const Quiz: React.FC = () => {
         </CardHeader>
         <CardContent>
           {showScore ? (
-            <Results score={score} totalQuestions={questions.length} onRestart={restartQuiz} />
+            <Results score={Math.min(score, questions.length)} totalQuestions={questions.length} onRestart={restartQuiz} />
           ) : (
             <>
               <Progress value={(currentQuestion + 1) / questions.length * 100} className="mb-4 bg-gray-200" />
@@ -173,21 +183,21 @@ const Quiz: React.FC = () => {
                 <p className="text-lg">{questions[currentQuestion].question}</p>
               </div>
               <div className="space-y-2">
-                {questions[currentQuestion].answerOptions.map((answerOption, index) => (
-                  <Button
-                    key={index}
-                    onClick={() => handleAnswerOptionClick(index)}
-                    variant={userAnswers[currentQuestion] === index ? "default" : "outline"}
-                    className={`w-full justify-start h-auto py-3 px-4 text-left 
-                      whitespace-normal min-h-[80px] break-words ${
-                        userAnswers[currentQuestion] === index
-                          ? 'bg-blue-500 text-white hover:bg-blue-600'
-                          : 'bg-white text-black hover:bg-blue-100'
-                      }`}
-                  >
-                    {answerOption.answer}
-                  </Button>
-                ))}
+              {questions[currentQuestion].answerOptions.map((answerOption, index) => (
+  <Button
+    key={index}
+    onClick={() => handleAnswerOptionClick(index)}
+    variant={userAnswers[currentQuestion] === index ? "default" : "outline"}
+    className={`w-full justify-start h-auto py-3 px-4 text-left 
+      whitespace-normal min-h-[80px] break-words ${
+        userAnswers[currentQuestion] === index
+          ? 'bg-blue-500 text-white-500 hover:bg-blue-600'
+          : 'bg-white text-black hover:bg-blue-100'
+      }`}
+  >
+    {answerOption.answer}
+  </Button>
+))}
               </div>
             </>
           )}
@@ -205,6 +215,7 @@ const Quiz: React.FC = () => {
             <Button 
               onClick={handleNext}
               className="bg-blue-500 text-white-500 hover:bg-blue-600"
+              disabled={userAnswers[currentQuestion] === null}
             >
               {currentQuestion === questions.length - 1 ? 'Terminé' : 'Suivant'}
             </Button>

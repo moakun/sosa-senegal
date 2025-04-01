@@ -41,8 +41,7 @@ export default function PostQuiz() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: session?.user?.email,
-          ...formData,
-          schema: 'senegal' // Only senegal-specific change
+          ...formData
         }),
       });
   
@@ -58,7 +57,7 @@ export default function PostQuiz() {
           mepSystem: '',
           intention: '',
         });
-        router.push('/dashboard'); // Updated to senegal dashboard
+        router.push('/dashboard');
       } else {
         alert('Échec de la mise à jour des données.');
       }

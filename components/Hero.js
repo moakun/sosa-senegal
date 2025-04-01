@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useMemo } from "react";
 import Image from "next/image";
@@ -46,9 +46,12 @@ const Hero = ({
               <p className="text-black-500 mt-4 mb-6">
               Sogea Satom Sénégal
               </p>
-              <Link href="/register">
+              <Link href="/login">
               <ButtonPrimary>Commencer!</ButtonPrimary>
               </Link>
+              <p className="text-sm text-black mt-4">
+                En cas de problème, veuillez envoyer un email à: <a href="mailto:developedbymoe@gmail.com" className="text-blue-500 underline">developedbymoe@gmail.com</a>
+              </p>
             </div>
             <div className="flex w-full">
               <motion.div className="h-full w-full" variants={scrollAnimation}>
