@@ -3,22 +3,6 @@ import { db } from "@/lib/db";
 import { hash } from "bcryptjs";
 import * as z from "zod";
 
-// Define types
-type UserData = {
-  fullName: string;
-  email: string;
-  companyName: string;
-  password: string;
-};
-
-type UserResponse = Omit<UserData, 'password'> & {
-  id: number;
-  video1: boolean;
-  video2: boolean;
-  gotAttestation: boolean;
-  date: Date;
-};
-
 const userSchema = z.object({
   fullName: z.string().min(1, "Full Name is required").max(100),
   email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -26,7 +10,7 @@ const userSchema = z.object({
   password: z.string().min(1, "Password is required").min(8, "Password must be at least 8 characters"),
 });
 
-export async function POST(req: Request): Promise<NextResponse> {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
     
@@ -76,8 +60,6 @@ export async function POST(req: Request): Promise<NextResponse> {
     const nextId = lastUser ? lastUser.id + 1 : 1;
 
     const hashedPassword = await hash(password, 10);
-
-    // Create user with the determined ID
     const newUser = await db.user.create({
       data: {
         id: nextId,
@@ -92,15 +74,15 @@ export async function POST(req: Request): Promise<NextResponse> {
       },
     });
 
-    // Properly typed destructuring
-    const { password: omittedPassword, ...userWithoutPassword } = newUser;
+    // Fixed unused var by prefixing with _
+    const { password: _omittedPassword, ...userWithoutPassword } = newUser;
 
     return NextResponse.json(
-      { user: userWithoutPassword as UserResponse, message: "User created successfully" },
+      { user: userWithoutPassword, message: "User created successfully" },
       { status: 201 }
     );
     
-  } catch (error) {
+  } catch (error: unknown) {  // Fixed any type
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: error.errors.map((e) => e.message).join(", ") },
