@@ -150,7 +150,7 @@ export default function Login() {
           </div>
           <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 text-center">
             <p className="text-sm text-gray-600">
-              Pas de compte?{' '}
+            <p>Pas de compte&apos;?{' '}</p>
               <a href="/register" className="font-medium text-[#135ced] hover:text-[#67a5f0]">
                 S'inscrire ici
               </a>

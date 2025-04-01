@@ -65,10 +65,18 @@ export default function Register() {
         description: "Compte créé avec succès !",
       });
       router.push("/login");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      let errorMessage = 'Une erreur est survenue lors de l&apos;inscription';
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+    
       toast({
         title: "Erreur",
-        description: error.message || "Une erreur est survenue lors de l'inscription",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

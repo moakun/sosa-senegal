@@ -1,16 +1,16 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { useToast } from "@/hooks/use-toast"
 import { useSession } from "next-auth/react"
 import questions from './questions'
-import Image from "next/image";
-import sosa from "../public/assets/sosal.png";
+import Image from "next/image"
+import sosa from "../public/assets/sosal.png"
 import Results from './Results'
-import Lse from "../public/assets/lse.jpeg";
+import Lse from "../public/assets/lse.jpeg"
 
 const Quiz: React.FC = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -20,82 +20,82 @@ const Quiz: React.FC = () => {
   const { toast } = useToast()
   const { data: session } = useSession()
 
-  useEffect(() => {
-    if (session?.user?.email) {
-      fetchUserScore(session.user.email)
-    }
-  }, [session])
-
-  const fetchUserScore = async (email: string) => {
+  const fetchUserScore = useCallback(async (email: string) => {
     try {
-      const response = await fetch(`/api/score?email=${encodeURIComponent(email)}`);
+      const response = await fetch(`/api/score?email=${encodeURIComponent(email)}`)
       if (!response.ok) {
-        throw new Error('Failed to fetch user score');
+        throw new Error('Failed to fetch user score')
       }
-  
-      const data = await response.json();
-  
+
+      const data = await response.json()
+
       if (data.success) {
         if (data.userData?.score !== null) {
-          const score = Math.min(data.userData.score, questions.length);
+          const score = Math.min(data.userData.score, questions.length)
           if (score >= 7) {
-            setScore(score);
-            setShowScore(true);
+            setScore(score)
+            setShowScore(true)
           } else {
-            setScore(score);
-            setShowScore(false);
+            setScore(score)
+            setShowScore(false)
             toast({
               title: "Score insuffisant",
-              description: `Votre score est ${score}, vous devez repasser l'examen.`,
+              description: `Votre score est ${score}, vous devez repasser l&apos;examen.`,
               variant: "default",
-            });
+            })
           }
         } else {
-          setScore(0);
-          setShowScore(false);
+          setScore(0)
+          setShowScore(false)
           toast({
             title: "Premier examen",
             description: "Bonne chance pour votre examen !",
             variant: "default",
-          });
+          })
         }
       } else {
-        console.log(data.message || "Erreur inconnue");
+        console.log(data.message || "Erreur inconnue")
         toast({
           title: "Message",
           description: data.message || "Impossible de récupérer le score",
           variant: "default",
-        });
+        })
       }
     } catch (error) {
-      console.error('Erreur:', error);
+      console.error('Erreur:', error)
       toast({
         title: "Erreur",
         description: "Impossible de récupérer le score",
         variant: "destructive",
-      });
+      })
     }
-  };
+  }, [toast])
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      fetchUserScore(session.user.email)
+    }
+  }, [session, fetchUserScore])
 
   const handleAnswerOptionClick = (answerIndex: number) => {
-    const newUserAnswers = [...userAnswers];
-    const previousAnswer = newUserAnswers[currentQuestion];
+    const newUserAnswers = [...userAnswers]
+    const previousAnswer = newUserAnswers[currentQuestion]
     
-    newUserAnswers[currentQuestion] = answerIndex;
-    setUserAnswers(newUserAnswers);
+    newUserAnswers[currentQuestion] = answerIndex
+    setUserAnswers(newUserAnswers)
 
-    const isCorrect = questions[currentQuestion].answerOptions[answerIndex].isCorrect;
+    const isCorrect = questions[currentQuestion].answerOptions[answerIndex].isCorrect
     const wasCorrect = previousAnswer !== null && 
-                      questions[currentQuestion].answerOptions[previousAnswer].isCorrect;
+                      questions[currentQuestion].answerOptions[previousAnswer].isCorrect
 
     setScore(prevScore => {
       if (isCorrect && !wasCorrect) {
-        return prevScore + 1;
+        return prevScore + 1
       } else if (!isCorrect && wasCorrect) {
-        return prevScore - 1;
+        return prevScore - 1
       }
-      return prevScore;
-    });
+      return prevScore
+    })
   }
 
   const handlePrevious = () => {
@@ -117,7 +117,7 @@ const Quiz: React.FC = () => {
     if (!session?.user?.email) return
 
     try {
-      const finalScore = Math.min(score, questions.length);
+      const finalScore = Math.min(score, questions.length)
       
       const response = await fetch('/api/score', {
         method: 'POST',
@@ -144,7 +144,7 @@ const Quiz: React.FC = () => {
       console.error('Erreur:', error)
       toast({
         title: "Erreur",
-        description: "Impossible d'enregistrer votre score",
+        description: "Impossible d&apos;enregistrer votre score",
         variant: "destructive",
       })
     }
@@ -167,7 +167,7 @@ const Quiz: React.FC = () => {
       <Card className="w-full max-w-7xl bg-white shadow-lg">
         <CardHeader>
           <CardTitle className="text-center">
-            Quiz sur l'éthique et la lutte contre la corruption
+            Quiz sur l&apos;éthique et la lutte contre la corruption
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -183,21 +183,21 @@ const Quiz: React.FC = () => {
                 <p className="text-lg">{questions[currentQuestion].question}</p>
               </div>
               <div className="space-y-2">
-              {questions[currentQuestion].answerOptions.map((answerOption, index) => (
-  <Button
-    key={index}
-    onClick={() => handleAnswerOptionClick(index)}
-    variant={userAnswers[currentQuestion] === index ? "default" : "outline"}
-    className={`w-full justify-start h-auto py-3 px-4 text-left 
-      whitespace-normal min-h-[80px] break-words ${
-        userAnswers[currentQuestion] === index
-          ? 'bg-blue-500 text-white-500 hover:bg-blue-600'
-          : 'bg-white text-black hover:bg-blue-100'
-      }`}
-  >
-    {answerOption.answer}
-  </Button>
-))}
+                {questions[currentQuestion].answerOptions.map((answerOption, index) => (
+                  <Button
+                    key={index}
+                    onClick={() => handleAnswerOptionClick(index)}
+                    variant={userAnswers[currentQuestion] === index ? "default" : "outline"}
+                    className={`w-full justify-start h-auto py-3 px-4 text-left 
+                      whitespace-normal min-h-[80px] break-words ${
+                        userAnswers[currentQuestion] === index
+                          ? 'bg-blue-500 text-white-500 hover:bg-blue-600'
+                          : 'bg-white text-black hover:bg-blue-100'
+                      }`}
+                  >
+                    {answerOption.answer}
+                  </Button>
+                ))}
               </div>
             </>
           )}
