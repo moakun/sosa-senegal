@@ -45,7 +45,6 @@ export default function Login() {
       }
 
       if (signInData.error) {
-        // More specific error handling
         let errorMessage = 'Email ou mot de passe incorrect';
         if (signInData.error.includes('CredentialsSignin')) {
           errorMessage = 'Authentification échouée';
@@ -59,7 +58,6 @@ export default function Login() {
           variant: 'destructive',
         });
       } else if (signInData.ok) {
-        // Check if URL is safe to redirect to
         const callbackUrl = signInData.url || '/dashboard';
         if (callbackUrl.startsWith('/')) {
           router.push(callbackUrl);
@@ -69,9 +67,13 @@ export default function Login() {
       }
     } catch (error) {
       console.error('Login error:', error);
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : 'Une erreur inattendue est survenue';
+      
       toast({
         title: 'Erreur',
-        description: 'Une erreur inattendue est survenue',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
@@ -150,9 +152,9 @@ export default function Login() {
           </div>
           <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 text-center">
             <p className="text-sm text-gray-600">
-            <p>Pas de compte&apos;?{' '}</p>
+              Pas de compte&apos;?{' '}
               <a href="/register" className="font-medium text-[#135ced] hover:text-[#67a5f0]">
-                S'inscrire ici
+                S&apos;inscrire ici
               </a>
             </p>
           </div>

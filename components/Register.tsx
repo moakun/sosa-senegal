@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useToast } from "@/hooks/use-toast";
+import React, { useState } from 'react';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useToast } from '@/hooks/use-toast';
 
 const FormSchema = z
   .object({
-    fullName: z.string().min(1, "Le nom complet est requis").max(100),
-    email: z.string().min(1, "L'email est requis").email("Email invalide"),
-    companyName: z.string().min(1, "Le nom de l'entreprise est requis"),
-    password: z.string().min(1, "Le mot de passe est requis").min(8, "Le mot de passe doit contenir au moins 8 caractères"),
-    confirmPassword: z.string().min(1, "La confirmation du mot de passe est requise"),
+    fullName: z.string().min(1, 'Le nom complet est requis').max(100),
+    email: z.string().min(1, 'L&apos;email est requis').email('Email invalide'),
+    companyName: z.string().min(1, 'Le nom de l&apos;entreprise est requis'),
+    password: z.string().min(1, 'Le mot de passe est requis').min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
+    confirmPassword: z.string().min(1, 'La confirmation du mot de passe est requise'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Les mots de passe ne correspondent pas",
+    path: ['confirmPassword'],
+    message: 'Les mots de passe ne correspondent pas',
   });
 
 export default function Register() {
@@ -30,21 +30,21 @@ export default function Register() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      fullName: "",
-      email: "",
-      companyName: "",
-      password: "",
-      confirmPassword: "",
+      fullName: '',
+      email: '',
+      companyName: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/user", {
-        method: "POST",
+      const response = await fetch('/api/user', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           fullName: values.fullName,
@@ -57,27 +57,23 @@ export default function Register() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || "Échec de l'inscription");
+        throw new Error(result.error || 'Échec de l&apos;inscription');
       }
 
       toast({
-        title: "Succès",
-        description: "Compte créé avec succès !",
+        title: 'Succès',
+        description: 'Compte créé avec succès !',
       });
-      router.push("/login");
-    } catch (error: unknown) {
-      let errorMessage = 'Une erreur est survenue lors de l&apos;inscription';
+      router.push('/login');
+    } catch (error) {
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : 'Une erreur est survenue lors de l&apos;inscription';
       
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else if (typeof error === 'string') {
-        errorMessage = error;
-      }
-    
       toast({
-        title: "Erreur",
+        title: 'Erreur',
         description: errorMessage,
-        variant: "destructive",
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -90,18 +86,18 @@ export default function Register() {
         <div className="bg-white-500 rounded-2xl shadow-xl overflow-hidden">
           <div className="p-8">
             <h2 className="text-3xl font-bold text-center mb-8 text-[#135ced]">
-            Créer un compte
+              Créer un compte
             </h2>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-                Nom complet
+                  Nom complet
                 </label>
                 <input
                   id="fullName"
                   type="text"
                   placeholder="John Doe"
-                  {...form.register("fullName")}
+                  {...form.register('fullName')}
                   className="w-full px-3 py-2 border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#135ced]"
                 />
                 {form.formState.errors.fullName && (
@@ -110,13 +106,13 @@ export default function Register() {
               </div>
               <div className="space-y-2">
                 <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">
-                Nom de l'entreprise
+                  Nom de l&apos;entreprise
                 </label>
                 <input
                   id="companyName"
                   type="text"
                   placeholder="Company"
-                  {...form.register("companyName")}
+                  {...form.register('companyName')}
                   className="w-full px-3 py-2 border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#135ced]"
                 />
                 {form.formState.errors.companyName && (
@@ -131,7 +127,7 @@ export default function Register() {
                   id="email"
                   type="email"
                   placeholder="you@example.com"
-                  {...form.register("email")}
+                  {...form.register('email')}
                   className="w-full px-3 py-2 border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#135ced]"
                 />
                 {form.formState.errors.email && (
@@ -140,14 +136,14 @@ export default function Register() {
               </div>
               <div className="space-y-2">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Mot de passe
+                  Mot de passe
                 </label>
                 <div className="relative">
                   <input
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
-                    {...form.register("password")}
+                    {...form.register('password')}
                     className="w-full px-3 py-2 border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#135ced]"
                   />
                   <button
@@ -168,14 +164,14 @@ export default function Register() {
               </div>
               <div className="space-y-2">
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirmer le mot de passe
+                  Confirmer le mot de passe
                 </label>
                 <div className="relative">
                   <input
                     id="confirmPassword"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
-                    {...form.register("confirmPassword")}
+                    {...form.register('confirmPassword')}
                     className="w-full px-3 py-2 border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#135ced]"
                   />
                 </div>
@@ -187,7 +183,7 @@ export default function Register() {
                 type="submit"
                 disabled={isLoading}
                 className={`w-full ${
-                  isLoading ? "bg-gray-400" : "bg-[#135ced] hover:bg-[#67a5f0]"
+                  isLoading ? 'bg-gray-400' : 'bg-[#135ced] hover:bg-[#67a5f0]'
                 } text-white-500 font-semibold py-3 px-4 rounded-md transition-all duration-300 flex justify-center items-center`}
               >
                 {isLoading ? (
@@ -199,14 +195,14 @@ export default function Register() {
                     Inscription en cours...
                   </>
                 ) : (
-                  "Register"
+                  'Register'
                 )}
               </button>
             </form>
             <div className="mt-4 text-center text-sm text-gray-600">
-            Vous avez déjà un compte ?{' '}
+              Vous avez déjà un compte&apos;?{' '}
               <a href="/login" className="font-medium text-[#135ced] hover:text-[#67a5f0]">
-              Connectez-vous ici
+                Connectez-vous ici
               </a>
             </div>
           </div>
