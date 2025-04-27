@@ -52,6 +52,9 @@ const Hero = ({
               <p className="text-sm text-black mt-4">
                 En cas de problème, veuillez envoyer un email à: <a href="mailto:developedbymoe@gmail.com" className="text-blue-500 underline">developedbymoe@gmail.com</a>
               </p>
+              <p className="text-sm text-black mt-4">
+              Après avoir reçu votre certificat, veuillez l&apos;envoyer à l&apos;adresse e-mail suivante: <a href="mailto:developedbymoe@gmail.com" className="text-blue-500 underline">developedbymoe@gmail.com</a>
+              </p>
             </div>
             <div className="flex w-full">
               <motion.div className="h-full w-full" variants={scrollAnimation}>
