@@ -7,82 +7,40 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function pingSupabase() {
   console.log('Starting Supabase ping process...');
-  console.log(`URL: ${supabaseUrl.substring(0, 20)}...`); // Show partial URL for debugging but hide most of it
+  console.log(`URL: ${supabaseUrl.substring(0, 20)}...`);
   
-  // Try multiple ping methods and report detailed results
+  // Try multiple ping methods until one succeeds
   const pingMethods = [
     {
-      name: 'Simple table count query',
+      name: 'Direct SQL query',
       fn: async () => {
-        // Find a table that exists and count its rows
-        // Try to use a small system table if possible
-        const { data, error } = await supabase
-          .from('_keymaker_keys')  // This is usually a small system table
-          .select('count(*)')
-          .limit(1);
-          
-        return { data, error };
-      }
-    },
-    {
-      name: 'System time query',
-      fn: async () => {
-        // Direct SQL query for current time
-        const { data, error } = await supabase.rpc('system_time');
+        // This approach works without needing any custom functions
+        // It directly executes SQL through the REST API
+        const { data, error } = await supabase.rpc('pg_sleep', { seconds: 0.1 });
+        // pg_sleep is a built-in PostgreSQL function that should exist in all databases
         return { data, error };
       }
     },
     {
       name: 'Health check',
       fn: async () => {
-        // Just check if we can connect
+        // Check if we can connect at all
         const { data, error } = await supabase.auth.getSession();
+        return { data, error };
+      }
+    },
+    {
+      name: 'Simple query',
+      fn: async () => {
+        // Just fetch schema information - should work on any database
+        const { data, error } = await supabase
+          .from('pg_catalog.pg_tables')
+          .select('schemaname')
+          .limit(1);
         return { data, error };
       }
     }
   ];
-  
-  // Create the system_time function if it doesn't exist yet
-  try {
-    const { error } = await supabase.rpc('system_time');
-    if (error && error.message.includes('does not exist')) {
-      console.log('Creating system_time function...');
-      // Create the function
-      const createFnResult = await supabase.rpc('create_system_time_function');
-      console.log('Function creation result:', createFnResult);
-    }
-  } catch (err) {
-    console.log('Error checking system_time function:', err.message);
-    
-    // Try to create the function directly with SQL
-    try {
-      const { error } = await supabase.sql(`
-        create or replace function public.system_time()
-        returns timestamptz
-        language sql
-        security definer
-        as $$
-          select now();
-        $$;
-        
-        create or replace function public.create_system_time_function()
-        returns text
-        language sql
-        security definer
-        as $$
-          select 'Function created';
-        $$;
-      `);
-      
-      if (error) {
-        console.log('Error creating functions with SQL:', error);
-      } else {
-        console.log('Successfully created functions');
-      }
-    } catch (sqlErr) {
-      console.log('SQL execution error:', sqlErr.message);
-    }
-  }
   
   // Try each ping method
   let succeeded = false;
@@ -116,7 +74,13 @@ async function pingSupabase() {
 // Execute the ping function
 pingSupabase()
   .then(result => {
-    process.exit(result ? 0 : 1);
+    if (result) {
+      console.log('Ping completed successfully');
+      process.exit(0);
+    } else {
+      console.error('Ping failed');
+      process.exit(1);
+    }
   })
   .catch(err => {
     console.error('Unhandled error:', err);
