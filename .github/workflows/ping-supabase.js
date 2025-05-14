@@ -7,66 +7,65 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function pingSupabase() {
   console.log('Starting Supabase ping process...');
-  console.log(`URL: ${supabaseUrl.substring(0, 20)}...`);
+  console.log(`Pinging URL: ${supabaseUrl.substring(0, 20)}...`);
   
-  // Try multiple ping methods until one succeeds
-  const pingMethods = [
-    {
-      name: 'Direct SQL query',
-      fn: async () => {
-        // This approach works without needing any custom functions
-        // It directly executes SQL through the REST API
-        const { data, error } = await supabase.rpc('pg_sleep', { seconds: 0.1 });
-        // pg_sleep is a built-in PostgreSQL function that should exist in all databases
-        return { data, error };
-      }
-    },
-    {
-      name: 'Health check',
-      fn: async () => {
-        // Check if we can connect at all
-        const { data, error } = await supabase.auth.getSession();
-        return { data, error };
-      }
-    },
-    {
-      name: 'Simple query',
-      fn: async () => {
-        // Just fetch schema information - should work on any database
-        const { data, error } = await supabase
-          .from('pg_catalog.pg_tables')
-          .select('schemaname')
-          .limit(1);
-        return { data, error };
-      }
-    }
-  ];
-  
-  // Try each ping method
   let succeeded = false;
-  for (const method of pingMethods) {
-    try {
-      console.log(`Trying method: ${method.name}`);
-      const { data, error } = await method.fn();
+  
+  try {
+    // Method 1: Try to use the auth API - this should be available on all projects
+    console.log('Trying auth API ping...');
+    const { data: authData, error: authError } = await supabase.auth.getSession();
+    
+    if (!authError) {
+      console.log('✅ Auth API ping successful!');
+      succeeded = true;
+    } else {
+      console.log('❌ Auth API ping failed:', authError.message);
       
-      if (error) {
-        console.log(`  Failed: ${error.message}`);
-      } else {
-        console.log(`  Success!`);
-        console.log(`  Response: ${JSON.stringify(data).substring(0, 100)}`);
+      // Method 2: Try to get information about available schemas
+      console.log('Trying storage health check...');
+      const { data: storageData, error: storageError } = await supabase
+        .storage
+        .listBuckets();
+      
+      if (!storageError) {
+        console.log('✅ Storage API ping successful!');
         succeeded = true;
-        break;  // Exit after first successful method
+      } else {
+        console.log('❌ Storage API ping failed:', storageError.message);
+        
+        // Method 3: Last resort - try a simple REST query
+        console.log('Trying direct REST ping...');
+        
+        // Make a simple GET request to the REST endpoint
+        // This should trigger database activity even if it returns an error
+        const response = await fetch(`${supabaseUrl}/rest/v1/`, {
+          method: 'GET',
+          headers: {
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`
+          }
+        });
+        
+        console.log(`REST ping status: ${response.status}`);
+        if (response.status < 500) {
+          // Any response other than a server error is good enough
+          console.log('✅ REST API ping successful!');
+          succeeded = true;
+        } else {
+          console.log('❌ REST API ping failed with server error');
+        }
       }
-    } catch (err) {
-      console.log(`  Exception: ${err.message}`);
     }
+  } catch (err) {
+    console.error('Unexpected error during ping:', err.message);
   }
   
   if (succeeded) {
-    console.log('Ping successful! Database will remain active for another 7 days');
+    console.log('✅ Ping successful! Database will remain active for another 7 days');
     return true;
   } else {
-    console.error('All ping methods failed');
+    console.error('❌ All ping methods failed');
     return false;
   }
 }
@@ -75,10 +74,10 @@ async function pingSupabase() {
 pingSupabase()
   .then(result => {
     if (result) {
-      console.log('Ping completed successfully');
+      console.log('Ping process completed successfully');
       process.exit(0);
     } else {
-      console.error('Ping failed');
+      console.error('Ping process failed');
       process.exit(1);
     }
   })
